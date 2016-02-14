@@ -13,17 +13,13 @@ class CricketRing: public SubNode {
     public:
         
         // Constructor
-        CricketRing();
+        CricketRing(int port);
         
         void init();
         void loop();
         
     protected:
         
-        /* Print a list of available commands and their formats over the
-         * defined communications channel
-         */
-        void cmdGetCommands();
         
         
 }
