@@ -29,6 +29,12 @@ class SubNode {
         bool fade(int address, int target, int duration);
         int  read(int address, int preprocessType);
         
+        /*TODO This is a hack and should not be here.
+         * It is needed because the mapping from 8P line
+         * to the device is not done properly.
+         */
+        virtual int getValueForAddr(char addr) = 0;
+        
     protected:
         char _port;
         std::map<int,Device*> devices;

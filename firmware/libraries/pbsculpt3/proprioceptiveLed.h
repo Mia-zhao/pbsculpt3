@@ -23,6 +23,12 @@ class ProprioceptiveLed: public SubNode {
         // 
         void getDeviceList(char* devList);
         
+        /*TODO This is a hack and should not be here.
+         * It is needed because the mapping from 8P line
+         * to the device is not done properly.
+         */
+        int getValueForAddr(char addr);
+        
     protected:
         
         

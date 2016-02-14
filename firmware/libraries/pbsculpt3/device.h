@@ -22,6 +22,8 @@ class Device {
         virtual int fade(int target, int duration) = 0;
         virtual int read(int preprocessType) = 0;
         
+        int address();
+        
     protected:
         int _address;
         int _type;
