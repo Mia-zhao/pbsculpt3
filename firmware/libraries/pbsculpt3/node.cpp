@@ -73,6 +73,12 @@ void Node::init(){
 
 	//--- I2C initialization ----
 	Wire.begin(I2C_MASTER,0x00, I2C_PINS_18_19, I2C_PULLUP_EXT, I2C_RATE_400);
+	
+	noInterrupts();
+	spwm.begin();
+	spwm.setPWMFreq(1000);  // This is the maximum PWM frequency
+	interrupts();
+
 }
 
 void Node::loop(){
@@ -104,7 +110,17 @@ void Node::loop(){
         /*if (id >= 0 && id < 4){
 		    if (i==0 || i==1 || i==3 || i==4) {
 			    if (id < 2){*/
-				    analogWrite(output_pins[id-1], value);//id], level);
+        /*if( i == 5 ){
+        Serial.printf("Writing Port%i:%i (Teensy Pin %i) as %i\n", i+1, id, output_pins[id-1], value);
+        }*/
+	    if( i != 5 ){
+	        analogWrite(output_pins[id-1], value);//id], level);
+	    } else {
+		    noInterrupts();
+		    spwm.setPWMFast(output_pins[id-1], 16*value);
+		    interrupts();
+	    }
+	    
 			    /*}
 			    else{
 				    noInterrupts();

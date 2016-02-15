@@ -10,11 +10,10 @@
 Device::Device(int address, int type):
     _address(address), _type(type)
 {
-    
 }
 
 void Device::loop(){
-    Serial.println("Device Loop");
+    //Serial.println("Device Loop");
 }
 
 int Device::address(){

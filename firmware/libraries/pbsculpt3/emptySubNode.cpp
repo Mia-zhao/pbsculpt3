@@ -16,7 +16,7 @@ EmptySubNode::EmptySubNode(char port):
 void EmptySubNode::init(){}
 
 void EmptySubNode::loop(){
-    Serial.println("EmptySubNode Loop");
+    //Serial.println("EmptySubNode Loop");
 }
 
 void EmptySubNode::getDeviceList(char* devList){}

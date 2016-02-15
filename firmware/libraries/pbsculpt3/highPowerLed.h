@@ -27,7 +27,7 @@ class HighPowerLED : public Device {
         int value();
         
     protected:        
-        int _value;
+        float _value, _fadeInitValue;
         
         // Fade Variables
         int _fadeDuration, _fadeTarget;

@@ -8,7 +8,7 @@
 #ifndef __SUBMODULE_H
 #define __SUBMODULE_H
 
-#include <map>
+#include <LinkedList.h>
 
 #include "device.h"
 
@@ -26,8 +26,8 @@ class SubNode {
         virtual void getDeviceList(char* devList) = 0;
         
         // Corresponding to the defined communcations protocol
-        bool fade(int address, int target, int duration);
-        int  read(int address, int preprocessType);
+        virtual bool fade(int address, int target, int duration);
+        virtual int  read(int address, int preprocessType);
         
         /*TODO This is a hack and should not be here.
          * It is needed because the mapping from 8P line
@@ -37,7 +37,7 @@ class SubNode {
         
     protected:
         char _port;
-        std::map<int,Device*> devices;
+        LinkedList<Device*> devices;
 };
 
 #endif

@@ -20,6 +20,9 @@ class ProprioceptiveLed: public SubNode {
         void init();
         void loop();
         
+        bool fade(int address, int target, int duration);
+        int  read(int address, int preprocessType);
+        
         // 
         void getDeviceList(char* devList);
         
@@ -30,6 +33,8 @@ class ProprioceptiveLed: public SubNode {
         int getValueForAddr(char addr);
         
     protected:
+    
+        Device* getDeviceAt(char addr);
         
         
         

@@ -60,7 +60,7 @@ class Node {
 		const uint8_t SPWM_3_pin[4] = {4, 5, 6, 7};
 		const uint8_t SPWM_4_pin[2] = {14, 15};
 		const uint8_t SPWM_5_pin[2] = {12, 13};
-		const uint8_t SPWM_6_pin[4] = {8, 9 , 10, 11};
+		const uint8_t SPWM_6_pin[4] = {8, 9, 10, 11};
 		const uint8_t* SPWM_pin[6];
 		
 		//--- I2C Multiplexer pins ---

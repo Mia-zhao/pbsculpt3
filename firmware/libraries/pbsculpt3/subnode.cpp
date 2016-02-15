@@ -9,7 +9,7 @@
 SubNode::SubNode(char port):
     _port(port)
 {
-    
+    devices = LinkedList<Device*>();
 }
 
 /*void SubNode::loop(){
