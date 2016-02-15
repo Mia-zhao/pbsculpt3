@@ -32,8 +32,7 @@ class Node {
         
         int _serialNumber;
         
-        
-		PWMDriver spwm;	
+		/*PWMDriver spwm;	
 		void spwm_init(uint16_t freq=1000);
         
 		//--- Fast PWM pins ---
@@ -65,7 +64,7 @@ class Node {
 		
 		//--- I2C Multiplexer pins ---
 		const uint8_t I2C_MUL_ADR_pin[3] = {2, 24, 33};
-		const uint8_t I2C_MUL_ADR[6] = {4, 6, 7, 2, 1, 0};
+		const uint8_t I2C_MUL_ADR[6] = {4, 6, 7, 2, 1, 0};*/
 
 };
 

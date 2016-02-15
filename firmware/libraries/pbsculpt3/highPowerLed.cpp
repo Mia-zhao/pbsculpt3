@@ -19,11 +19,12 @@ void HighPowerLED::init(){
 }
 
 void HighPowerLED::loop(){
-    Serial.println("HighPowerLED Loop");
+    //Serial.println("HighPowerLED Loop");
     // Adjust the value as we fade towards the next step
-    if( (_fadeDuration - _fadeTime) > 0 ){
+    /*if( (_fadeDuration - _fadeTime) > 0 ){
         _value += (_value - _fadeTarget)/(_fadeDuration - _fadeTime);
-    } // Else stay at the same value
+    } // Else stay at the same value*/
+    _value = _fadeTarget;
 }
 
 int HighPowerLED::fade(int target, int duration){
