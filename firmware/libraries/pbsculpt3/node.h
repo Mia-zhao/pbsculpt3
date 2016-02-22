@@ -25,13 +25,14 @@ class Node {
         void init();
         void loop();
         
+        int deviceCount();
+        
         SubNode *subnodes[N_SUBNODES];
+        
+        int _serialNumber;                
         
     protected:
         void switchPort(char port);
-        
-        int _serialNumber;
-        
         
 		PWMDriver spwm;	
 		void spwm_init(uint16_t freq=1000);

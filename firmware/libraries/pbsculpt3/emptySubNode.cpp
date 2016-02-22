@@ -19,7 +19,9 @@ void EmptySubNode::loop(){
     //Serial.println("EmptySubNode Loop");
 }
 
-void EmptySubNode::getDeviceList(char* devList){}
+int EmptySubNode::getDeviceList(uint8_t* devList, int position){
+    return position;
+}
 
 
         

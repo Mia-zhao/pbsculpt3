@@ -6,6 +6,8 @@
 #include "subnode.h"
 #include "device.h"
 
+#include <Arduino.h>
+
 SubNode::SubNode(char port):
     _port(port)
 {
@@ -33,4 +35,9 @@ bool SubNode::fade(int address, int target, int duration){
 
 int  SubNode::read(int address, int preprocessType){
     return 0;
+}
+
+int SubNode::deviceCount(){
+    //Serial.printf("Port %i: %i devices...\n", _port, devices.size());
+    return devices.size();
 }

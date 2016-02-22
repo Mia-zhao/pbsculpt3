@@ -11,6 +11,7 @@
 #include <LinkedList.h>
 
 #include "device.h"
+#include <Arduino.h>
 
 class SubNode {
     
@@ -23,7 +24,7 @@ class SubNode {
         virtual void loop() = 0;
         
         // 
-        virtual void getDeviceList(char* devList) = 0;
+        virtual int getDeviceList(uint8_t* devList, int position) = 0;
         
         // Corresponding to the defined communcations protocol
         virtual bool fade(int address, int target, int duration);
@@ -34,6 +35,8 @@ class SubNode {
          * to the device is not done properly.
          */
         virtual int getValueForAddr(char addr) = 0;
+        
+        virtual int deviceCount();
         
     protected:
         char _port;

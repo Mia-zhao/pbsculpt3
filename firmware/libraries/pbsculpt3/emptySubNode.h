@@ -21,7 +21,7 @@ class EmptySubNode: public SubNode {
         void loop();
         
         // 
-        void getDeviceList(char* devList);
+        int getDeviceList(uint8_t* devList, int position);
         
         /*TODO This is a hack and should not be here.
          * It is needed because the mapping from 8P line

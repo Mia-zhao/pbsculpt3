@@ -34,7 +34,7 @@ int HighPowerLED::fade(int target, int duration){
     _fadeTarget = target;
     _fadeInitValue = _value;
     
-    Serial.println("Got Fade Command.");
+    //Serial.println("Got Fade Command.");
     
     return 0;
 }

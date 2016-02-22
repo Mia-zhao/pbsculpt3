@@ -60,8 +60,18 @@ int  ProprioceptiveLed::read(int address, int preprocessType){
 }
 
 
-void ProprioceptiveLed::getDeviceList(char* devList){
-    sprintf(devList, "%i.3.%i %i.6.%i", _port, LED_ADDRESS, _port, PHOTO_ADDRESS);
+/* Updates the devList array and returns the new position marker
+ */
+int ProprioceptiveLed::getDeviceList(uint8_t* devList, int position){
+   devList[position] = _port;
+   devList[position+1] = 3;
+   devList[position+2] = LED_ADDRESS;
+   devList[position+3] = _port;
+   devList[position+4] = 6;
+   devList[position+5] = PHOTO_ADDRESS;
+   position += 6;
+   
+   return position;
 }
 
 int ProprioceptiveLed::getValueForAddr(char addr){
