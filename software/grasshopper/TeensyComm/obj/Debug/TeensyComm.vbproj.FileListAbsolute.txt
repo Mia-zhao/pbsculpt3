@@ -1,0 +1,8 @@
+C:\Users\mzwi\Source\Workspaces\Teensy\TeensySerial\TeensySerialComm\obj\Debug\TeensyComm.vbproj.GenerateResource.Cache
+C:\Users\mzwi\Source\Workspaces\Teensy\TeensySerial\TeensySerialComm\obj\Debug\TeensyComm.Resources.resources
+C:\Users\mzwi\Source\Workspaces\Teensy\TeensySerial\TeensySerialComm\bin\Debug\TeensyComm.dll
+C:\Users\mzwi\Source\Workspaces\Teensy\TeensySerial\TeensySerialComm\bin\Debug\TeensyComm.pdb
+C:\Users\mzwi\Source\Workspaces\Teensy\TeensySerial\TeensySerialComm\bin\Debug\TeensyComm.xml
+C:\Users\mzwi\Source\Workspaces\Teensy\TeensySerial\TeensySerialComm\obj\Debug\TeensyComm.dll
+C:\Users\mzwi\Source\Workspaces\Teensy\TeensySerial\TeensySerialComm\obj\Debug\TeensyComm.xml
+C:\Users\mzwi\Source\Workspaces\Teensy\TeensySerial\TeensySerialComm\obj\Debug\TeensyComm.pdb
