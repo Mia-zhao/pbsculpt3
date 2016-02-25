@@ -1,11 +1,19 @@
-The attached Python code implements a communication protocol for setting and reading from devices attached to a Teensy, based on the Communication Specification.  It echos anything it receives from the sculpture out to a UDP listener.  Currently, the code assumes you are running in Windows.
+The attached Python code implements a communication protocol for setting and reading from devices attached to a Teensy, based on the Communication Specification.  It echos anything it receives from the sculpture out to a UDP listener.
 
-For it to work, it needs to have three parameters set in simpleTeensyComs.py:
-* the teensyID of the Teensy you're communicating with (this is called teensy_sernum in the python code)
-* the COM port the Teensy is on (the code currently assumes it is running on a Windows machine; this is called teensy_comport in the code)
-* the IP address of the UDP listener (called UDP_IP in the code)
+Two scripts are available to use and both have the same argument structure.
+`comm_test_main.py` is the python script to test Teensy communications to ensure that they conform to the command structure. `cbla_main.py` is the script to run a basic CBLA implementation. The commands are run as: 
 
-The first two can be determined once the Teensy is plugged into the computer's USB port, by running TyQt as follows
+	scriptname.py teensy_comport teensy_serial [comp_serial] [grasshopper_serial]
+	
+	positional arguments:
+	  teensy_comport      The Teensy com port.
+	  teensy_serial       The Teensy serial number - usually 6-7 digits.
+	  comp_serial         The computers serial number for the purposes of
+	                      simulation [22222]
+	  grasshopper_serial  The Grasshopper nodes serial number for the purposes of
+	                      simulation [33333]
+
+The first two arguments can be determined once the Teensy is plugged into the computer's USB port, by running TyQt as follows
 * download and install TyQt from https://github.com/Koromix/ty/releases/
 * connect your Teensy to the USB port on your computer (NOTE: Teensy will not work on a USB3.0 port)
 * run TyQt

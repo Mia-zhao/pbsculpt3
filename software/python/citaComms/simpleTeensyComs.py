@@ -5,14 +5,14 @@ import time
 import socket
 
 #setup the Teensy
-teensy_sernum = 69029 #107935 #69029
-teensy_comport = "COM4"
+#teensy_sernum = 69029 #107935 #69029
+#teensy_comport = "COM4"
 
 #CBLA setup
 cbla_pc_id = 22222
 
 #setup for UDP transmitting
-UDPSend = True;
+UDPSend = True
 #UDP_IP = "127.0.0.1"
 UDP_IP = "10.1.45.171"
 UDP_PORT = 6000
@@ -33,26 +33,29 @@ def sendUDP(msg):
 
 
 #Function to initialize the serial port
-def initializeComms(CoMId = "COM4", timeout = 1):
+def initializeComms(CoMId, timeout = 1):
     ser = serial.Serial(CoMId)
     ser.timeout = timeout
     return ser
 
 def ReadFromSerial(ser):
+    #print("Sleeping...")
     time.sleep(1)
+    #print("Waking...")
     if ser.is_open:
         numBytes = ser.in_waiting
         if numBytes > 0:
             r1 = ser.read_all()
             sendUDP(r1)
-            #print(r1)
+            print(r1)
             resp = bytearray(r1)
         else:
             print('No data at serial port')
-            #return -1
+            return -1
     else:
         print('Serial Port not open')
         return -1
+
     destId = int.from_bytes(resp[0:3], byteorder='big')
     origId = int.from_bytes(resp[3:6], byteorder='big')
     cmdNum = resp[6]
@@ -86,8 +89,6 @@ def Echo(tSerConnection):
         if numBytes > 0:
             r1 = tSerConnection.readline()
             #print(r1)
-
-
 
 def QueryNumDevices(tSerConnection, destTeensy, myId):
     WriteToSerial(tSerConnection, destTeensy, myId, QUERYNUMDEV, [])
@@ -173,6 +174,3 @@ def CBLAStatusReport(myId, destListener, CBLANodeId, numExperts, maxActionValue)
     cmd += m.to_bytes(2,'big')
     print(cmd)
     sendUDP(cmd)
-
-
-

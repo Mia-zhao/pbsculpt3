@@ -1,6 +1,6 @@
 from cbla_learner import Learner
 import simpleTeensyComs
-import Plots
+from random import randint
 
 if __name__ == '__main__':
 
@@ -55,17 +55,18 @@ if __name__ == '__main__':
 
         return normValues
 
-
-
-
-    lrnr = Learner(tuple([0]*numSens),tuple([0]*numActs))
-
-
-
     iterNum = 0
     actionValHist = []
-    while 1:
 
+    N_CYCLES = 5
+
+    for j in range(N_CYCLES):
+
+        for i in range(len(actValues)):
+            if j < N_CYCLES-1:
+                actValues[i] = randint(0, 15)
+            else:
+                actValues[i] = 0
 
         # Act:  Update all the active actuators (do not act on the very first iteration,
         # until the sensors have been read
@@ -80,28 +81,5 @@ if __name__ == '__main__':
             sensValues[i] = simpleTeensyComs.Read(teensyComms, destination,
                                                   origin,SensList[i].genByteStr(), 0)
             print('Sensor ', i, 'Reads a Value of ',sensValues[i])
-
-        #Learn:
-        lrnr.learn(tuple(normalize_sens(sensValues,SensList)),tuple(actValues))
-
-        #Select Next action to perform
-        actValues = lrnr.select_action()
-
-        numExperts = lrnr.expert.get_num_experts()
-
-        #if iterNum == 10:
-         #  Plots.PlotModel(list(lrnr.expert.training_data),
-         #                  list(lrnr.expert.training_label),
-          #                 lrnr.expert.predict_model.predict(list(lrnr.expert.training_data)))
-
-        if numExperts > 1:
-            print('Increased number of experts')
-        #Report the action value and the number of experts currently in the system
-        print('Current max action value is ', lrnr.expert.get_largest_action_value())
-        print('Current number of experts is', lrnr.expert.get_num_experts())
-
-        simpleTeensyComs.CBLAStatusReport(origin,Grasshopper, 0,
-                                          lrnr.expert.get_num_experts(),
-                                          lrnr.expert.get_largest_action_value())
 
         iterNum += 1
