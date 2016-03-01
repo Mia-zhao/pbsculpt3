@@ -50,11 +50,9 @@ def ReadFromSerial(ser):
             print(r1)
             resp = bytearray(r1)
         else:
-            print('No data at serial port')
-            return -1
+            raise ConnectionError("No data at serial port. Did you forget to close TyQT or the Arduino Serial Monitor?")
     else:
-        print('Serial Port not open')
-        return -1
+            raise ConnectionError("Serial port not open. Did you forget to close TyQT or the Arduino Serial Monitor?")
 
     destId = int.from_bytes(resp[0:3], byteorder='big')
     origId = int.from_bytes(resp[3:6], byteorder='big')
