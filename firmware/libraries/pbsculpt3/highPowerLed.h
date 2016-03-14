@@ -8,10 +8,10 @@
 #ifndef __HIGHPOWERLED_H
 #define __HIGHPOWERLED_H
 
-#include "device.h"
+#include "peripheral.h"
 #include <elapsedMillis.h>
 
-class HighPowerLED : public Device {
+class HighPowerLED : public Peripheral {
     
     public:
         
@@ -26,7 +26,7 @@ class HighPowerLED : public Device {
         
         int value();
         
-    protected:        
+    protected:
         float _value, _fadeInitValue;
         
         // Fade Variables

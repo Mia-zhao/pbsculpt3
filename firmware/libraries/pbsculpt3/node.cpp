@@ -82,59 +82,76 @@ void Node::init(){
 }
 
 void Node::loop(){
-    // Call loop for all of the devices
-    for(int port0=0; port0 < N_DEVICES; port0++){
-        // Switch to port. Eventually move this to the subnode level.
-        
-        devices[port0]->loop();
-        
-        // WARNING: This is a super hack!
-		uint8_t output_pins[4];
-    	if (port0==2 || port0==5){
-		    output_pins[0] = SPWM_pin[port0][0];
-		    output_pins[1] = SPWM_pin[port0][1];
-		    output_pins[2] = SPWM_pin[port0][2];
-		    output_pins[3] = SPWM_pin[port0][3];
-	    }
-	    else{
-		    output_pins[0] = FPWM_pin[port0][0];
-		    output_pins[1] = FPWM_pin[port0][1];
-		    output_pins[2] = SPWM_pin[port0][0];
-		    output_pins[3] = SPWM_pin[port0][1];
-	    }
-        
-        
-        int addr1 = 1;
-        int value = devices[port0]->getValueForAddr(addr1);
-        /* MATT's CODE */
-        /*if (addr1 >= 0 && addr1 < 4){
-		    if (i==0 || i==1 || i==3 || i==4) {
-			    if (addr1 < 2){*/
-        /*if( i == 5 ){
-        Serial.printf("Writing Port%i:%i (Teensy Pin %i) as %i\n", i+1, addr1, output_pins[addr1-1], value);
-        }*/
-	    if( port0 != 5 ){
-	        analogWrite(output_pins[addr1-1], value);//addr1], level);
-	    } else {
-		    noInterrupts();
-		    spwm.setPWMFast(output_pins[addr1-1], 16*value);
-		    interrupts();
-	    }
-	    
-			    /*}
-			    else{
-				    noInterrupts();
-				    teensy_unit.spwm.setPWMFast(output_pins[addr1], 16*level);
-				    interrupts();
-			    }
-		    }
-	    }/* else {
-		    noInterrupts();
-		    teensy_unit.spwm.setPWMFast(output_pins[addr1], 16*level);
-		    interrupts();
-	    }*/
-    }
+
+	// Make sure all of the device's loops are called
+	for(int port0=0; port0 < N_DEVICES; port0++){
+		devices[port0]->loop();
+	}
+
+	_loopPWM();
+	//_loopAnalogRead();
 }
+
+void Node::_loopPWM(){
+	// Call loop for all of the devices
+	for(int port0=0; port0 < N_DEVICES; port0++){
+		// Switch to port. Eventually move this to the deviceModule level.
+
+		// WARNING: This is a super hack!
+		uint8_t output_pins[4];
+		if (port0==2 || port0==5){
+			output_pins[0] = SPWM_pin[port0][0];
+			output_pins[1] = SPWM_pin[port0][1];
+			output_pins[2] = SPWM_pin[port0][2];
+			output_pins[3] = SPWM_pin[port0][3];
+		}
+		else{
+			output_pins[0] = FPWM_pin[port0][0];
+			output_pins[1] = FPWM_pin[port0][1];
+			output_pins[2] = SPWM_pin[port0][0];
+			output_pins[3] = SPWM_pin[port0][1];
+		}
+
+
+		int addr1 = 1;
+		int value = devices[port0]->getValueForAddr(addr1);
+		/* MATT's CODE */
+		/*if (addr1 >= 0 && addr1 < 4){Analog_pin
+			if (i==0 || i==1 || i==3 || i==4) {
+				if (addr1 < 2){*/
+		/*if( i == 5 ){
+		Serial.printf("Writing Port%i:%i (Teensy Pin %i) as %i\n", i+1, addr1, output_pins[addr1-1], value);
+		}*/
+		if( port0 != 5 ){
+			analogWrite(output_pins[addr1-1], value);//addr1], level);
+		} else {
+			noInterrupts();
+			spwm.setPWMFast(output_pins[addr1-1], 16*value);
+			interrupts();
+		}
+
+				/*}
+				else{
+					noInterrupts();
+					teensy_unit.spwm.setPWMFast(output_pins[addr1], 16*level);
+					interrupts();
+				}
+			}
+		}/* else {
+			noInterrupts();
+			teensy_unit.spwm.setPWMFast(output_pins[addr1], 16*level);
+			interrupts();
+		}*/
+	}
+}
+
+/*void Node::_loopAnalogRead(){
+	// Loop over every device
+	for(int port0=0; port0 < N_DEVICES; port0++){
+		devices[port0]->getValueForAddr(addr1);
+		analogRead(analog_pin[port0][0]);
+	}
+}*/
 
 int Node::deviceCount(){
     

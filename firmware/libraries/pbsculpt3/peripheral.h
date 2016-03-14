@@ -8,12 +8,21 @@
 #ifndef __DEVICE_H
 #define __DEVICE_H
 
+#define DEVICE_TYPE_HIGH_POWER_LED 5
+#define DEVICE_TYPE_PHOTO_SENSOR 6
+
 class Peripheral {
     
     public:
         
-        // Constructor
-	Peripheral(int address, int type);
+        /**Represents a low-level peripheral in a pbsculpt system
+         *
+         * @brief For example, could be an LED, a proximity sensor, etc.
+         *
+         * @param address The pin address of the peripheral
+         * @param type The (integer) type, defined in the communication spec
+         */
+		Peripheral(int address, int type);
         
         virtual void init() = 0;
         virtual void loop();

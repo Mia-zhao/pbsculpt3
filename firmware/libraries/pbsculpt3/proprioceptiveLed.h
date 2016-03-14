@@ -36,8 +36,6 @@ class ProprioceptiveLed: public DeviceModule {
     
         Peripheral* getPeripheralAt(char addr);
         
-        
-        
 };
 
 #endif

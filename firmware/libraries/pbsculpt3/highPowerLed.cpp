@@ -7,7 +7,7 @@
 #include <Arduino.h>
 
 HighPowerLED::HighPowerLED(int address) :
-    Device(address,3), _value(0.0), _fadeInitValue(0.0), _fadeDuration(0),
+Peripheral(address,3), _value(0.0), _fadeInitValue(0.0), _fadeDuration(0),
     _fadeTime(0), _fadeTarget(0)
 {
     
