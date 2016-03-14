@@ -10,21 +10,21 @@
 
 #include <LinkedList.h>
 
-#include "device.h"
+#include "peripheral.h"
 #include <Arduino.h>
 
-class SubNode {
+class DeviceModule {
     
     public:
         
         // Constructor
-        SubNode(char port);
+		DeviceModule(char port);
         
         virtual void init() = 0;
         virtual void loop() = 0;
         
         // 
-        virtual int getDeviceList(uint8_t* devList, int position) = 0;
+        virtual int getPeripheralList(uint8_t* peripheralList, int position) = 0;
         
         // Corresponding to the defined communcations protocol
         virtual bool fade(int address, int target, int duration);
@@ -36,11 +36,11 @@ class SubNode {
          */
         virtual int getValueForAddr(char addr) = 0;
         
-        virtual int deviceCount();
+        virtual int peripheralCount();
         
     protected:
         char _port;
-        LinkedList<Device*> devices;
+        LinkedList<Peripheral*> peripherals;
 };
 
 #endif

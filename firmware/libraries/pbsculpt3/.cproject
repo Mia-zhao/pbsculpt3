@@ -18,8 +18,13 @@
 							<targetPlatform archList="all" binaryParser="org.eclipse.cdt.core.ELF" id="it.baeyens.arduino.targetplatform.435684536" name="Arduino Target" osList="all" superClass="it.baeyens.arduino.targetplatform"/>
 							<builder id="it.baeyens.arduino.sketch.builder.335036378" keepEnvironmentInBuildfile="false" managedBuildOn="false" name="Arduino sketch builder" superClass="it.baeyens.arduino.sketch.builder"/>
 							<tool id="it.baeyens.arduino.tool.sketch.compiler.cpp.230972217" name="Arduino C++ Compiler" superClass="it.baeyens.arduino.tool.sketch.compiler.cpp">
-								<option id="it.baeyens.arduino.compiler.cpp.sketch.option.incpath.12691385" superClass="it.baeyens.arduino.compiler.cpp.sketch.option.incpath" valueType="includePath">
-									<listOptionValue builtIn="false" value="/home/tmp/Arduino/libraries"/>
+								<option id="it.baeyens.arduino.compiler.cpp.sketch.option.incpath.12691385" name="Include Paths (-I)" superClass="it.baeyens.arduino.compiler.cpp.sketch.option.incpath" valueType="includePath">
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/pbsculpt3}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${HOME}/Arduino/libraries&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${HOME}/Documents/Arduino/libraries&quot;"/>
+									<listOptionValue builtIn="false" value="/usr/local/src/arduino-1.6.7/libraries"/>
+									<listOptionValue builtIn="false" value="/usr/local/src/arduino-1.6.7/hardware/teensy/avr/libraries"/>
+									<listOptionValue builtIn="false" value="/usr/local/src/arduino-1.6.7/hardware/teensy/avr/cores/teensy3"/>
 								</option>
 								<inputType id="it.baeyens.arduino.compiler.cpp.sketch.input.778355932" name="CPP source files" superClass="it.baeyens.arduino.compiler.cpp.sketch.input"/>
 							</tool>
@@ -46,5 +51,9 @@
 		<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId=""/>
 	</storageModule>
 	<storageModule moduleId="org.eclipse.cdt.core.LanguageSettingsProviders"/>
-	<storageModule moduleId="refreshScope"/>
+	<storageModule moduleId="refreshScope" versionNumber="2">
+		<configuration configurationName="Release">
+			<resource resourceType="PROJECT" workspacePath="/pbsculpt3"/>
+		</configuration>
+	</storageModule>
 </cproject>

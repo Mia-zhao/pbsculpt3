@@ -20,7 +20,7 @@ class ProprioceptiveLightNode {
         
     protected:
         int _serial;
-        SubNode subnodes[6];
+        DeviceModule devices[6];
 }
 
 #endif

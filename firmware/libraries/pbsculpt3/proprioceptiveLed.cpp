@@ -12,14 +12,14 @@
 #define PHOTO_ADDRESS 5
 
 ProprioceptiveLed::ProprioceptiveLed(char port):
-    SubNode(port)
+	DeviceModule(port)
 {
     
 }
 
 void ProprioceptiveLed::init(){
     HighPowerLED* led = new HighPowerLED(LED_ADDRESS);
-    devices.add(led);
+    peripherals.add(led);
 }
 
 void ProprioceptiveLed::loop(){
@@ -32,18 +32,18 @@ void ProprioceptiveLed::loop(){
     }*/
     //Serial.printf("Looping propLed for %i devices...\n", devices.size());
     
-    for (int i=0; i<devices.size(); i++) {
+    for (int i=0; i<peripherals.size(); i++) {
         //Serial.printf("Looping propLed: device %i...\n", i);
         //Serial.printf("propLed properties: %i, %i, %i, %i\n", iter->second->_value, iter->second->_fadeDuration, iter->second->_fadeTarget, iter->second->_fadeTime);
         //Serial.println(iter->second->address());
-        devices.get(i)->loop();
+    	peripherals.get(i)->loop();
     }
     
     //Serial.printf("Done looping propLed...\n");
 }
 
 bool ProprioceptiveLed::fade(int address, int target, int duration){
-    Device* d = getDeviceAt(address);
+	Peripheral* d = getPeripheralAt(address);
     if( d != NULL ){
         d->fade(target, duration);
         return true;
@@ -52,7 +52,7 @@ bool ProprioceptiveLed::fade(int address, int target, int duration){
 }
 
 int  ProprioceptiveLed::read(int address, int preprocessType){
-    Device* d = getDeviceAt(address);
+	Peripheral* d = getPeripheralAt(address);
     if( d != NULL ){
         return d->read(preprocessType);
     }
@@ -62,30 +62,30 @@ int  ProprioceptiveLed::read(int address, int preprocessType){
 
 /* Updates the devList array and returns the new position marker
  */
-int ProprioceptiveLed::getDeviceList(uint8_t* devList, int position){
-   devList[position] = _port;
-   devList[position+1] = 3;
-   devList[position+2] = LED_ADDRESS;
-   devList[position+3] = _port;
-   devList[position+4] = 6;
-   devList[position+5] = PHOTO_ADDRESS;
-   position += 6;
+int ProprioceptiveLed::getPeripheralList(uint8_t* peripheralList, int position){
+	peripheralList[position] = _port;
+	peripheralList[position+1] = 3;
+	peripheralList[position+2] = LED_ADDRESS;
+	peripheralList[position+3] = _port;
+	peripheralList[position+4] = 6;
+	peripheralList[position+5] = PHOTO_ADDRESS;
+	position += 6;
    
-   return position;
+	return position;
 }
 
 int ProprioceptiveLed::getValueForAddr(char addr){
-    Device* d = getDeviceAt(addr);
+	Peripheral* d = getPeripheralAt(addr);
     if( d != NULL ){
         return d->read(0);
     }
     return 0;
 }
 
-Device* ProprioceptiveLed::getDeviceAt(char addr){
-    for( int i=0; i<devices.size(); i++ ){
-       if( devices.get(i)->address() == addr ){
-        return devices.get(i);
+Device* ProprioceptiveLed::getPeripheralAt(char addr){
+    for( int i=0; i<peripherals.size(); i++ ){
+       if( peripherals.get(i)->address() == addr ){
+        return peripherals.get(i);
        }
     }
     return NULL;

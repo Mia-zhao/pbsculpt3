@@ -8,9 +8,9 @@
 #ifndef __PROPRIOCEPTIVELED_H
 #define __PROPRIOCEPTIVELED_H
 
-#include "subnode.h"
+#include "deviceModule.h"
 
-class ProprioceptiveLed: public SubNode {
+class ProprioceptiveLed: public DeviceModule {
     
     public:
         
@@ -24,7 +24,7 @@ class ProprioceptiveLed: public SubNode {
         int  read(int address, int preprocessType);
         
         // 
-        int getDeviceList(uint8_t* devList, int position);
+        int getPeripheralList(uint8_t* peripheralList, int position);
         
         /*TODO This is a hack and should not be here.
          * It is needed because the mapping from 8P line
@@ -34,7 +34,7 @@ class ProprioceptiveLed: public SubNode {
         
     protected:
     
-        Device* getDeviceAt(char addr);
+        Peripheral* getPeripheralAt(char addr);
         
         
         

@@ -8,20 +8,20 @@
 #ifndef __EMPTYSUBNODE_H
 #define __EMPTYSUBNODE_H
 
-#include "subnode.h"
+#include "deviceModule.h"
 
-class EmptySubNode: public SubNode {
+class EmptyDeviceModule: public DeviceModule {
     
     public:
         
         // Constructor
-        EmptySubNode(char port);
+		EmptyDeviceModule(char port);
         
         void init();
         void loop();
         
         // 
-        int getDeviceList(uint8_t* devList, int position);
+        int getPeripheralList(uint8_t* peripheralList, int position);
         
         /*TODO This is a hack and should not be here.
          * It is needed because the mapping from 8P line

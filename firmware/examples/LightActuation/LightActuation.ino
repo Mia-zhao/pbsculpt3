@@ -18,7 +18,7 @@
 #include "Arduino.h"
 
 #include "node.h"
-#include "emptySubNode.h"
+#include "emptyDeviceModule.h"
 #include "proprioceptiveLed.h"
 
 //#include <SerialCommand.h>
@@ -41,12 +41,12 @@ void setup() {
   //Serial.println("Booting...");
 
   // put your setup code here, to run once:
-  node.subnodes[0] = new EmptySubNode(1);
-  node.subnodes[1] = new EmptySubNode(2);
-  node.subnodes[2] = new EmptySubNode(3);
-  node.subnodes[3] = new ProprioceptiveLed(4);
-  node.subnodes[4] = new ProprioceptiveLed(5);
-  node.subnodes[5] = new ProprioceptiveLed(6);
+  node.devices[0] = new EmptyDeviceModule(1);
+  node.devices[1] = new EmptyDeviceModule(2);
+  node.devices[2] = new EmptyDeviceModule(3);
+  node.devices[3] = new ProprioceptiveLed(4);
+  node.devices[4] = new ProprioceptiveLed(5);
+  node.devices[5] = new ProprioceptiveLed(6);
 
   node.init();
   node._serialNumber = serialCommSetup();
@@ -172,7 +172,7 @@ int loadAddresses(uint8_t *addresses) {
 
 //dataIn[0] > port, dataIn[1] > type, dataIn[2] > address, dataIn[3] > value, dataIn[4] > duration
 void doFade(uint8_t port, uint8_t type, uint8_t addr, uint8_t value, uint8_t duration) {
-  node.subnodes[port - 1]->fade(addr, value, duration);
+  node.devices[port - 1]->fade(addr, value, duration);
 }
 
 unsigned int getSensorData(uint8_t port, uint8_t type, uint8_t addr, uint8_t value,

@@ -3,15 +3,15 @@
  *
  */
 
-#include "subnode.h"
-#include "device.h"
+#include "deviceModule.h"
+#include "peripheral.h"
 
 #include <Arduino.h>
 
-SubNode::SubNode(char port):
+DeviceModule::DeviceModule(char port):
     _port(port)
 {
-    devices = LinkedList<Device*>();
+    peripherals = LinkedList<Peripheral*>();
 }
 
 /*void SubNode::loop(){
@@ -29,15 +29,15 @@ SubNode::SubNode(char port):
     }
 }*/
 
-bool SubNode::fade(int address, int target, int duration){
+bool DeviceModule::fade(int address, int target, int duration){
     return false;
 }
 
-int  SubNode::read(int address, int preprocessType){
+int  DeviceModule::read(int address, int preprocessType){
     return 0;
 }
 
-int SubNode::deviceCount(){
+int DeviceModule::peripheralCount(){
     //Serial.printf("Port %i: %i devices...\n", _port, devices.size());
-    return devices.size();
+    return peripherals.size();
 }

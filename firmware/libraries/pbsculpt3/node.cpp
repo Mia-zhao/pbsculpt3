@@ -4,14 +4,14 @@
  */
 
 #include "node.h"
-#include "subnode.h"
+#include "deviceModule.h"
 
 //#include "wave_table.h"
 #include "i2c_t3.h"
 #include "Arduino.h"
 
 Node::Node(int serialNumber): /* 
-    _serialNumber(serialNumber), subnodes(new SubNode[6])*/
+    _serialNumber(serialNumber), devices(new SubNode[6])*/
     FPWM_pin {FPWM_1_pin, FPWM_2_pin, FPWM_3_pin, FPWM_4_pin, FPWM_5_pin, FPWM_6_pin},
 	SPWM_pin {SPWM_1_pin, SPWM_2_pin, SPWM_3_pin, SPWM_4_pin, SPWM_5_pin, SPWM_6_pin}, 
 	Analog_pin {Analog_1_pin, Analog_2_pin, Analog_3_pin, Analog_4_pin, Analog_5_pin, Analog_6_pin}
@@ -20,9 +20,9 @@ Node::Node(int serialNumber): /*
 }
 
 void Node::init(){
-    // Call init for all of the subnodes
-    for(int i=0; i < N_SUBNODES; i++){
-        subnodes[i]->init();
+    // Call init for all of the devices
+    for(int i=0; i < N_DEVICES; i++){
+        devices[i]->init();
     }
     
     // All of Matt's init code:
@@ -82,11 +82,11 @@ void Node::init(){
 }
 
 void Node::loop(){
-    // Call loop for all of the subnodes
-    for(int port0=0; port0 < N_SUBNODES; port0++){
+    // Call loop for all of the devices
+    for(int port0=0; port0 < N_DEVICES; port0++){
         // Switch to port. Eventually move this to the subnode level.
         
-        subnodes[port0]->loop();
+        devices[port0]->loop();
         
         // WARNING: This is a super hack!
 		uint8_t output_pins[4];
@@ -105,7 +105,7 @@ void Node::loop(){
         
         
         int addr1 = 1;
-        int value = subnodes[port0]->getValueForAddr(addr1);
+        int value = devices[port0]->getValueForAddr(addr1);
         /* MATT's CODE */
         /*if (addr1 >= 0 && addr1 < 4){
 		    if (i==0 || i==1 || i==3 || i==4) {
@@ -139,8 +139,8 @@ void Node::loop(){
 int Node::deviceCount(){
     
     int count = 0;
-    for(int i=0; i<sizeof(subnodes); i++){
-        count += subnodes[i]->deviceCount();
+    for(int i=0; i<sizeof(devices); i++){
+        count += devices[i]->peripheralCount();
     }
     
     return count;

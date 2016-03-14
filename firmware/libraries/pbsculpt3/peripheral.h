@@ -8,12 +8,12 @@
 #ifndef __DEVICE_H
 #define __DEVICE_H
 
-class Device {
+class Peripheral {
     
     public:
         
         // Constructor
-        Device(int address, int type);
+	Peripheral(int address, int type);
         
         virtual void init() = 0;
         virtual void loop();

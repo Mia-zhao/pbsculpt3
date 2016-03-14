@@ -3,19 +3,19 @@
  *
  */
 
-#include "device.h"
+#include "peripheral.h"
 
 #include <Arduino.h>
 
-Device::Device(int address, int type):
+Peripheral::Peripheral(int address, int type):
     _address(address), _type(type)
 {
 }
 
-void Device::loop(){
+void Peripheral::loop(){
     //Serial.println("Device Loop");
 }
 
-int Device::address(){
+int Peripheral::address(){
     return _address;
 }

@@ -8,9 +8,9 @@
 #ifndef __NODE_H
 #define __NODE_H
 
-#define N_SUBNODES 6
+#define N_DEVICES 6
 
-#include "subnode.h"
+#include "deviceModule.h"
 
 #include <Arduino.h>
 #include "PWMDriver.h"
@@ -27,7 +27,7 @@ class Node {
         
         int deviceCount();
         
-        SubNode *subnodes[N_SUBNODES];
+        DeviceModule *devices[N_DEVICES];
         
         int _serialNumber;                
         
@@ -36,7 +36,7 @@ class Node {
         
 		PWMDriver spwm;	
 		void spwm_init(uint16_t freq=1000);
-        
+
 		//--- Fast PWM pins ---
 		const uint8_t FPWM_1_pin[2] = {3, 4};
 		const uint8_t FPWM_2_pin[2] = {6, 5};
