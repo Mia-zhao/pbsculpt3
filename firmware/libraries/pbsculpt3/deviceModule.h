@@ -38,9 +38,15 @@ class DeviceModule {
         
         virtual int peripheralCount();
         
+        bool hasFastPWM();
+
+        bool hasFastPWMForAddress(int address);
+        int getPinForAddress(int address);
+
     protected:
         char _port;
         LinkedList<Peripheral*> peripherals;
+        uint8_t _fpwm[2], _spwm[4], _analog[2];
 };
 
 #endif

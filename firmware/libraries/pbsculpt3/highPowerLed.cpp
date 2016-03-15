@@ -4,16 +4,20 @@
  */
 
 #include "highPowerLed.h"
+
 #include <Arduino.h>
 
-HighPowerLED::HighPowerLED(int address) :
-Peripheral(address,3), _value(0.0), _fadeInitValue(0.0), _fadeDuration(0),
+HighPowerLED::HighPowerLED(int address, int pin, bool fastPWM) :
+Peripheral(address, 3, pin, fastPWM), _value(0.0), _fadeInitValue(0.0), _fadeDuration(0),
     _fadeTime(0), _fadeTarget(0)
 {
     
 }
 
 void HighPowerLED::init(){
+	if(_fastPWM){
+		pinMode(_pin, OUTPUT);
+	}
 }
 
 void HighPowerLED::loop(){
@@ -25,6 +29,14 @@ void HighPowerLED::loop(){
         //Serial.printf("FADING: %f, %i, %f, %f, %i, %i\n", _value, _fadeTarget, _fadeInitValue, slope, _fadeDuration, (int)_fadeTime);
     } else {
         _value = (float)_fadeTarget;
+    }
+
+    if( _fastPWM ){
+    	analogWrite(_pin, _value);
+    } else {
+    	noInterrupts();
+		spwm.setPWMFast(_pin, 16*_value);
+		interrupts();
     }
 }
 

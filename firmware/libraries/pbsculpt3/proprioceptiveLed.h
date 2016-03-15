@@ -10,6 +10,8 @@
 
 #include "deviceModule.h"
 
+#include <LinkedList.h>
+
 class ProprioceptiveLed: public DeviceModule {
     
     public:
@@ -35,7 +37,6 @@ class ProprioceptiveLed: public DeviceModule {
     protected:
     
         Peripheral* getPeripheralAt(char addr);
-        
 };
 
 #endif

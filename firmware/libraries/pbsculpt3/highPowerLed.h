@@ -16,7 +16,7 @@ class HighPowerLED : public Peripheral {
     public:
         
         // Constructor
-        HighPowerLED(int address);
+        HighPowerLED(int address, int pin, bool fastPWM);
         
         void init();
         void loop();

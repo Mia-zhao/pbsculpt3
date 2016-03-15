@@ -19,15 +19,19 @@ class Peripheral {
          *
          * @brief For example, could be an LED, a proximity sensor, etc.
          *
-         * @param address The pin address of the peripheral
+         * @param address The 8P conductor address of the peripheral. 1-4 is PWM. 5-6 is Analog In. This is 1-indexed.
          * @param type The (integer) type, defined in the communication spec
+         * @param pin The pin (on the Teensy or SoftPWM) that the peripheral connects to
+         * @param fastPWM Is the pin a fast (hardware) PWM pin?
+         *
+         * @todo Break some of this out into Sensor/Actuator as a subclass of peripheral?
          */
-		Peripheral(int address, int type);
+		Peripheral(int address, int type, int pin, bool fastPWM);
         
         virtual void init() = 0;
         virtual void loop();
                 
-        // Corresponding to the defined communcations protocol
+        // Corresponding to the defined communications protocol
         virtual int fade(int target, int duration) = 0;
         virtual int read(int preprocessType) = 0;
         
@@ -36,6 +40,8 @@ class Peripheral {
     protected:
         int _address;
         int _type;
+        int _pin;
+        int _fastPWM;
 };
 
 #endif

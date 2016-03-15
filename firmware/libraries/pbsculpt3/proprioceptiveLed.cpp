@@ -5,6 +5,7 @@
 
 #include "proprioceptiveLed.h"
 #include "highPowerLed.h"
+#include "AmbientLightSensor.h"
 
 #include <stdio.h>
 
@@ -18,8 +19,13 @@ ProprioceptiveLed::ProprioceptiveLed(char port):
 }
 
 void ProprioceptiveLed::init(){
-    HighPowerLED* led = new HighPowerLED(LED_ADDRESS);
+    HighPowerLED* led = new HighPowerLED(LED_ADDRESS,
+    		getPinForAddress(LED_ADDRESS), hasFastPWMForAddress(LED_ADDRESS));
     peripherals.add(led);
+
+    AmbientLightSensor* ambientLight = new AmbientLightSensor(PHOTO_ADDRESS,
+    		getPinForAddress(PHOTO_ADDRESS), hasFastPWMForAddress(PHOTO_ADDRESS));
+    peripherals.add(ambientLight);
 }
 
 void ProprioceptiveLed::loop(){
@@ -62,6 +68,7 @@ int  ProprioceptiveLed::read(int address, int preprocessType){
 
 /* Updates the devList array and returns the new position marker
  */
+#include "pindefs.h"
 int ProprioceptiveLed::getPeripheralList(uint8_t* peripheralList, int position){
 	peripheralList[position] = _port;
 	peripheralList[position+1] = 3;
@@ -82,7 +89,7 @@ int ProprioceptiveLed::getValueForAddr(char addr){
     return 0;
 }
 
-Device* ProprioceptiveLed::getPeripheralAt(char addr){
+Peripheral* ProprioceptiveLed::getPeripheralAt(char addr){
     for( int i=0; i<peripherals.size(); i++ ){
        if( peripherals.get(i)->address() == addr ){
         return peripherals.get(i);

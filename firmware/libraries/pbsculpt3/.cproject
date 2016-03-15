@@ -16,19 +16,33 @@
 					<folderInfo id="it.baeyens.arduino.core.toolChain.release.584173819.686331395" name="/" resourcePath="">
 						<toolChain id="it.baeyens.arduino.core.toolChain.release.603129151" name="Arduino Toolchain" superClass="it.baeyens.arduino.core.toolChain.release">
 							<targetPlatform archList="all" binaryParser="org.eclipse.cdt.core.ELF" id="it.baeyens.arduino.targetplatform.435684536" name="Arduino Target" osList="all" superClass="it.baeyens.arduino.targetplatform"/>
-							<builder id="it.baeyens.arduino.sketch.builder.335036378" keepEnvironmentInBuildfile="false" managedBuildOn="false" name="Arduino sketch builder" superClass="it.baeyens.arduino.sketch.builder"/>
+							<builder id="it.baeyens.arduino.sketch.builder.335036378" keepEnvironmentInBuildfile="false" managedBuildOn="false" name="Arduino sketch builder" superClass="it.baeyens.arduino.sketch.builder">
+								<outputEntries>
+									<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="outputPath" name=""/>
+								</outputEntries>
+							</builder>
 							<tool id="it.baeyens.arduino.tool.sketch.compiler.cpp.230972217" name="Arduino C++ Compiler" superClass="it.baeyens.arduino.tool.sketch.compiler.cpp">
 								<option id="it.baeyens.arduino.compiler.cpp.sketch.option.incpath.12691385" name="Include Paths (-I)" superClass="it.baeyens.arduino.compiler.cpp.sketch.option.incpath" valueType="includePath">
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/pbsculpt3}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${HOME}/Arduino/libraries&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${HOME}/Documents/Arduino/libraries&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/pbsculpt3/pbsculpt3}&quot;"/>
+									<listOptionValue builtIn="false" value="/home/dkadish/Arduino/libraries"/>
+									<listOptionValue builtIn="false" value="/home/dkadish/Documents/Arduino/libraries"/>
 									<listOptionValue builtIn="false" value="/usr/local/src/arduino-1.6.7/libraries"/>
 									<listOptionValue builtIn="false" value="/usr/local/src/arduino-1.6.7/hardware/teensy/avr/libraries"/>
 									<listOptionValue builtIn="false" value="/usr/local/src/arduino-1.6.7/hardware/teensy/avr/cores/teensy3"/>
+									<listOptionValue builtIn="false" value="/usr/local/src/arduino-1.6.7/hardware/tools/arm/arm-none-eabi/include"/>
 								</option>
 								<inputType id="it.baeyens.arduino.compiler.cpp.sketch.input.778355932" name="CPP source files" superClass="it.baeyens.arduino.compiler.cpp.sketch.input"/>
 							</tool>
 							<tool id="it.baeyens.arduino.tool.compiler.c.1783254026" name="Arduino C Compiler" superClass="it.baeyens.arduino.tool.compiler.c">
+								<option id="it.baeyens.arduino.compiler.c.sketch.option.incpath.158862638" name="Include Paths (-I)" superClass="it.baeyens.arduino.compiler.c.sketch.option.incpath" valueType="includePath">
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/pbsculpt3/pbsculpt3}&quot;"/>
+									<listOptionValue builtIn="false" value="/home/dkadish/Arduino/libraries"/>
+									<listOptionValue builtIn="false" value="/home/dkadish/Documents/Arduino/libraries"/>
+									<listOptionValue builtIn="false" value="/usr/local/src/arduino-1.6.7/libraries"/>
+									<listOptionValue builtIn="false" value="/usr/local/src/arduino-1.6.7/hardware/teensy/avr/libraries"/>
+									<listOptionValue builtIn="false" value="/usr/local/src/arduino-1.6.7/hardware/teensy/avr/cores/teensy3"/>
+									<listOptionValue builtIn="false" value="/usr/local/src/arduino-1.6.7/hardware/tools/arm/arm-none-eabi/include"/>
+								</option>
 								<inputType id="it.baeyens.arduino.compiler.c.sketch.input.1276722994" name="C Source Files" superClass="it.baeyens.arduino.compiler.c.sketch.input"/>
 							</tool>
 							<tool id="it.baeyens.arduino.tool.sketch.compiler.s.1936774091" name="Arduino Assembler" superClass="it.baeyens.arduino.tool.sketch.compiler.s"/>
@@ -39,6 +53,61 @@
 							<tool id="it.baeyens.arduino.tool.size.693651067" name="Arduino tool Print Size" superClass="it.baeyens.arduino.tool.size"/>
 						</toolChain>
 					</folderInfo>
+					<sourceEntries>
+						<entry excluding="LinkedList|libraries" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
+						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="libraries"/>
+					</sourceEntries>
+				</configuration>
+			</storageModule>
+			<storageModule moduleId="org.eclipse.cdt.core.externalSettings"/>
+		</cconfiguration>
+		<cconfiguration id="it.baeyens.arduino.core.toolChain.release.584173819.1947157189">
+			<storageModule buildSystemId="org.eclipse.cdt.managedbuilder.core.configurationDataProvider" id="it.baeyens.arduino.core.toolChain.release.584173819.1947157189" moduleId="org.eclipse.cdt.core.settings" name="Debug">
+				<macros>
+					<stringMacro name="__MK20DX256__" type="VALUE_TEXT" value=""/>
+				</macros>
+				<externalSettings/>
+				<extensions>
+					<extension id="org.eclipse.cdt.core.ELF" point="org.eclipse.cdt.core.BinaryParser"/>
+					<extension id="org.eclipse.cdt.core.GLDErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
+					<extension id="org.eclipse.cdt.core.MakeErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
+					<extension id="org.eclipse.cdt.core.GCCErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
+				</extensions>
+			</storageModule>
+			<storageModule moduleId="cdtBuildSystem" version="4.0.0">
+				<configuration artifactName="${ProjName}" buildProperties="" description="Prints Debug messages" id="it.baeyens.arduino.core.toolChain.release.584173819.1947157189" name="Debug" parent="org.eclipse.cdt.build.core.emptycfg">
+					<folderInfo id="it.baeyens.arduino.core.toolChain.release.584173819.1947157189." name="/" resourcePath="">
+						<toolChain id="it.baeyens.arduino.core.toolChain.release.1191481151" name="Arduino Toolchain" superClass="it.baeyens.arduino.core.toolChain.release">
+							<targetPlatform archList="all" binaryParser="org.eclipse.cdt.core.ELF" id="it.baeyens.arduino.targetplatform.1663106030" name="Arduino Target" osList="all" superClass="it.baeyens.arduino.targetplatform"/>
+							<builder id="it.baeyens.arduino.sketch.builder.966943572" keepEnvironmentInBuildfile="false" managedBuildOn="false" name="Arduino sketch builder" superClass="it.baeyens.arduino.sketch.builder"/>
+							<tool id="it.baeyens.arduino.tool.sketch.compiler.cpp.561872067" name="Arduino C++ Compiler" superClass="it.baeyens.arduino.tool.sketch.compiler.cpp">
+								<option id="it.baeyens.arduino.compiler.cpp.sketch.option.incpath.190243876" name="Include Paths (-I)" superClass="it.baeyens.arduino.compiler.cpp.sketch.option.incpath" valueType="includePath">
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/pbsculpt3}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${HOME}/Arduino/libraries&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${HOME}/Documents/Arduino/libraries&quot;"/>
+									<listOptionValue builtIn="false" value="/usr/local/src/arduino-1.6.7/libraries"/>
+									<listOptionValue builtIn="false" value="/usr/local/src/arduino-1.6.7/hardware/teensy/avr/libraries"/>
+									<listOptionValue builtIn="false" value="/usr/local/src/arduino-1.6.7/hardware/teensy/avr/cores/teensy3"/>
+									<listOptionValue builtIn="false" value="/usr/local/src/arduino-1.6.7/hardware/tools/arm/arm-none-eabi/include"/>
+								</option>
+								<inputType id="it.baeyens.arduino.compiler.cpp.sketch.input.891654384" name="CPP source files" superClass="it.baeyens.arduino.compiler.cpp.sketch.input"/>
+							</tool>
+							<tool id="it.baeyens.arduino.tool.compiler.c.2085772419" name="Arduino C Compiler" superClass="it.baeyens.arduino.tool.compiler.c">
+								<inputType id="it.baeyens.arduino.compiler.c.sketch.input.800391586" name="C Source Files" superClass="it.baeyens.arduino.compiler.c.sketch.input"/>
+							</tool>
+							<tool id="it.baeyens.arduino.tool.sketch.compiler.s.700340726" name="Arduino Assembler" superClass="it.baeyens.arduino.tool.sketch.compiler.s"/>
+							<tool id="it.baeyens.arduino.tool.ar.626822987" name="Arduino archiver" superClass="it.baeyens.arduino.tool.ar"/>
+							<tool id="it.baeyens.arduino.tool.combine.212752763" name="Arduino combiner" superClass="it.baeyens.arduino.tool.combine"/>
+							<tool id="it.baeyens.arduino.tool.objcopy.eep.20042872" name="Arduino tool Create eeprom" superClass="it.baeyens.arduino.tool.objcopy.eep"/>
+							<tool id="it.baeyens.arduino.tool.objcopy.flash.108913795" name="Arduino tool Create hex" superClass="it.baeyens.arduino.tool.objcopy.flash"/>
+							<tool id="it.baeyens.arduino.tool.size.454958187" name="Arduino tool Print Size" superClass="it.baeyens.arduino.tool.size"/>
+						</toolChain>
+					</folderInfo>
+					<sourceEntries>
+						<entry excluding="LinkedList|libraries" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
+						<entry excluding="LinkedList" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="libraries"/>
+						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="libraries/LinkedList"/>
+					</sourceEntries>
 				</configuration>
 			</storageModule>
 			<storageModule moduleId="org.eclipse.cdt.core.externalSettings"/>
@@ -56,4 +125,5 @@
 			<resource resourceType="PROJECT" workspacePath="/pbsculpt3"/>
 		</configuration>
 	</storageModule>
+	<storageModule moduleId="org.eclipse.cdt.internal.ui.text.commentOwnerProjectMappings"/>
 </cproject>
