@@ -3,23 +3,23 @@
  *
  */
 
-#include "emptySubNode.h"
+#include "emptyDeviceModule.h"
 
 #include <Arduino.h>
 
-EmptySubNode::EmptySubNode(char port):
-    SubNode(port)
+EmptyDeviceModule::EmptyDeviceModule(char port):
+	DeviceModule(port)
 {
     
 }
 
-void EmptySubNode::init(){}
+void EmptyDeviceModule::init(){}
 
-void EmptySubNode::loop(){
+void EmptyDeviceModule::loop(){
     //Serial.println("EmptySubNode Loop");
 }
 
-int EmptySubNode::getDeviceList(uint8_t* devList, int position){
+int EmptyDeviceModule::getPeripheralList(uint8_t* peripheralList, int position){
     return position;
 }
 
@@ -29,4 +29,4 @@ int EmptySubNode::getDeviceList(uint8_t* devList, int position){
  * It is needed because the mapping from 8P line
  * to the device is not done properly.
  */
-int EmptySubNode::getValueForAddr(char addr){ return 0; }
+int EmptyDeviceModule::getValueForAddr(char addr){ return 0; }

@@ -3,6 +3,8 @@
  *
  */
 
+#define DEBUG 1
+
 #include "node.h"
 
 #include "pindefs.h"
@@ -18,6 +20,8 @@ Node::Node(int serialNumber)
 }
 
 void Node::init(){
+	if (DEBUG) Serial.println("Initializing Node.");
+
     // Call init for all of the devices
     for(int i=0; i < N_DEVICES; i++){
         devices[i]->init();
@@ -51,14 +55,17 @@ void Node::init(){
 		pinMode(I2C_MUL_ADR_pin[i], OUTPUT);
 	}	
 
+	if (DEBUG) Serial.println("Starting I2C.");
 	//--- I2C initialization ----
 	Wire.begin(I2C_MASTER,0x00, I2C_PINS_18_19, I2C_PULLUP_EXT, I2C_RATE_400);
-	
+
+	if (DEBUG) Serial.println("Setting PWM Frequency.");
 	noInterrupts();
 	spwm.begin();
 	spwm.setPWMFreq(1000);  // This is the maximum PWM frequency
 	interrupts();
 
+	if (DEBUG) Serial.println("Finished Initializing Node.");
 }
 
 void Node::loop(){

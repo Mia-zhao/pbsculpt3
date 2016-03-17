@@ -4,6 +4,7 @@
  */
 
 #include "highPowerLed.h"
+#include "pindefs.h"
 
 #include <Arduino.h>
 

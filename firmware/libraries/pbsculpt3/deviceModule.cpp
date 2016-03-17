@@ -8,18 +8,20 @@
 #include "pindefs.h"
 #include "peripheral.h"
 
-#include <LinkedList.h>
 #include <Arduino.h>
 
 DeviceModule::DeviceModule(char port):
-    _port(port), _fpwm(FPWM_pin[port]), _spwm(SPWM_pin[port]), _analog(Analog_pin[port])
+    _port(port),
+	_fpwm(&(FPWM_pin[(int)port][0])),
+	_spwm(&(SPWM_pin[(int)port][0])),
+	_analog(&(Analog_pin[(int)port][0]))
 {
     peripherals = LinkedList<Peripheral*>();
 }
 
 /*void SubNode::loop(){
 
-    /*std::map<int,Device>::iterator iter;
+    //std::map<int,Device>::iterator iter;
     
     for (iter = devices.begin(); iter != devices.end(); iter++) {
         //Switch to device port
@@ -89,7 +91,7 @@ int DeviceModule::getPinForAddress(int address){
 	} else if (address <= 4){
 		return _spwm[address-1];
 	} else if (address <= 6){
-		return _analog(address-5);
+		return _analog[address-5];
 	}
 
 	return -1; // Is this right? Something's wrong.
