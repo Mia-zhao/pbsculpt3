@@ -46,7 +46,7 @@ class DeviceModule {
     protected:
         char _port;
         LinkedList<Peripheral*> peripherals;
-        uint8_t * _fpwm, * _spwm, * _analog;
+        const uint8_t * _fpwm, * _spwm, * _analog;
 };
 
 #endif
