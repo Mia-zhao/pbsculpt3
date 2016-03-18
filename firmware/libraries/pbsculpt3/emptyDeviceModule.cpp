@@ -4,6 +4,7 @@
  */
 
 #include "emptyDeviceModule.h"
+#include "tools.h"
 
 #include <Arduino.h>
 
@@ -13,7 +14,9 @@ EmptyDeviceModule::EmptyDeviceModule(char port):
     
 }
 
-void EmptyDeviceModule::init(){}
+void EmptyDeviceModule::init(){
+	DBGLN("Initializing EmptyDeviceModule.");
+}
 
 void EmptyDeviceModule::loop(){
     //Serial.println("EmptySubNode Loop");

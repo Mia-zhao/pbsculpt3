@@ -7,6 +7,7 @@
 #include "highPowerLed.h"
 #include "AmbientLightSensor.h"
 
+#include "tools.h"
 #include <stdio.h>
 
 #define LED_ADDRESS 1
@@ -19,6 +20,7 @@ ProprioceptiveLed::ProprioceptiveLed(char port):
 }
 
 void ProprioceptiveLed::init(){
+	DBGLN("Initializing ProprioceptiveLed.");
     HighPowerLED* led = new HighPowerLED(LED_ADDRESS,
     		getPinForAddress(LED_ADDRESS), hasFastPWMForAddress(LED_ADDRESS));
     peripherals.add(led);
