@@ -65,9 +65,8 @@ void setup() {
   node.devices[4] = new ProprioceptiveLed(5);
   DBG(".");
   node.devices[5] = new ProprioceptiveLed(6);
-  DBG(".");
+  DBGLN(".");
 
-  DBG("Initializing Node.");
   node.init();
   DBG("Getting Serial Number");
   node._serialNumber = serialCommSetup();

@@ -16,6 +16,7 @@ EmptyDeviceModule::EmptyDeviceModule(char port):
 
 void EmptyDeviceModule::init(){
 	DBGLN("Initializing EmptyDeviceModule.");
+	DBGLN("Finished Initializing EmptyDeviceModule.");
 }
 
 void EmptyDeviceModule::loop(){

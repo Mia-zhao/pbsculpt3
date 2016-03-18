@@ -6,15 +6,27 @@
 #include "deviceModule.h"
 
 #include "pindefs.h"
+#include "tools.h"
 #include "peripheral.h"
 
 #include <Arduino.h>
 
+#define _SLOW_ONLY_PORT_1 3
+#define _SLOW_ONLY_PORT_2 6
+
+/**DeviceModules are the main units connected via 8P Modular cable to a Node
+ *
+ * DeviceModules can communicate over I2C, 4 PWM lines and 2 Analog lines to
+ * the node. They can host peripherals and perform functionality.
+ *
+ * @param port The 1-indexed port number. For the current hardware, will be 1-6
+ *
+ */
 DeviceModule::DeviceModule(char port):
     _port(port),
-	_fpwm(&(FPWM_pin[(int)port][0])),
-	_spwm(&(SPWM_pin[(int)port][0])),
-	_analog(&(Analog_pin[(int)port][0]))
+	_fpwm(&(FPWM_pin[(int)port-1][0])),
+	_spwm(&(SPWM_pin[(int)port-1][0])),
+	_analog(&(Analog_pin[(int)port-1][0]))
 {
     peripherals = LinkedList<Peripheral*>();
 }
@@ -55,7 +67,7 @@ int DeviceModule::peripheralCount(){
  */
 bool DeviceModule::hasFastPWM(){
 	// Ports 2 and 5 have only SPWM outputs
-	if( _port==2 || _port==5 ){
+	if( _port==_SLOW_ONLY_PORT_1 || _port==_SLOW_ONLY_PORT_2 ){
 		return false;
 	}
 
@@ -82,16 +94,20 @@ bool DeviceModule::hasFastPWMForAddress(int address){
  *
  */
 int DeviceModule::getPinForAddress(int address){
-	if( hasFastPWM() ){
+	if (address >= 5 && address <= 6){
+			DBGLN("Is a sensor...")
+			return _analog[address-5];
+	} else if( hasFastPWM() ){
 		if( hasFastPWMForAddress(address) ){
+			DBGLN("Has FPWM for Addr...")
 			return _fpwm[address-1];
 		} else {
+			DBGLN("Has FPWM but not for Addr...")
 			return _spwm[address-3];
 		}
 	} else if (address <= 4){
+		DBGLN("Has no FPWM...")
 		return _spwm[address-1];
-	} else if (address <= 6){
-		return _analog[address-5];
 	}
 
 	return -1; // Is this right? Something's wrong.
