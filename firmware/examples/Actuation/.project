@@ -32,6 +32,11 @@
 	</natures>
 	<linkedResources>
 		<link>
+			<name>SerialCommand</name>
+			<type>2</type>
+			<location>/home/dkadish/Documents/Arduino/libraries/SerialCommand</location>
+		</link>
+		<link>
 			<name>pbsculpt3</name>
 			<type>2</type>
 			<location>/home/dkadish/workspace/pbsculpt3/firmware/libraries/pbsculpt3</location>
