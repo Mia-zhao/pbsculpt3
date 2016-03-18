@@ -13,8 +13,6 @@
 
 */
 
-#define DEBUG 1
-
 #include "Arduino.h"
 #include "tools.h"
 
@@ -30,6 +28,9 @@ Node node(111111);
 
 /*void cmdFade();
   void cmdVersion();*/
+
+bool heartbeatOn=false;
+elapsedMillis heartbeatTimer;
 
 void setup() {
 
@@ -66,8 +67,6 @@ void setup() {
   node.devices[5] = new ProprioceptiveLed(6);
   DBG(".");
 
-  //TODO Dies here. What is going on?
-
   DBG("Initializing Node.");
   node.init();
   DBG("Getting Serial Number");
@@ -90,7 +89,23 @@ void loop() {
 
   //sCmd.readSerial();     // We don't do much, just process serial commands
 
+  doHeartbeat();
+
   delay(1);
+}
+
+void doHeartbeat(){
+	if(heartbeatTimer > 250){
+		heartbeatTimer = 0;
+
+		if(heartbeatOn){
+			digitalWrite(LED_BUILTIN, LOW);
+		} else {
+			digitalWrite(LED_BUILTIN, HIGH);
+		}
+
+		heartbeatOn = !heartbeatOn;
+	}
 }
 
 /*void cmdFade() {
