@@ -188,6 +188,7 @@ long int serialCommSetup() {
   return myID;
 }
 
+//TODO Fix this!
 uint8_t getNumDevices() {
   return 3;
   //return node.deviceCount();
@@ -246,6 +247,7 @@ void sendMessage(long int sendTo, uint8_t sendCmd, long int sendSize) {
 
 void serialCommLoop() {
   if (Serial.available() > 0) {
+	DBG("Got a Serial Message...")
 
     //Serial.println("Serial Available...");
 
@@ -253,13 +255,17 @@ void serialCommLoop() {
     for (i = 2; i >= 0; i--) {
       destID |= (Serial.read() << (8 * i));
     }
+	DBG("Got destID")
     for (i = 2; i >= 0; i--) {
       origID |= (Serial.read() << (8 * i));
     }
+	DBG("Got origID")
     cmdNum = Serial.read();
-    for (i = 3;not i >= 0; i--) {
+	DBG("Got cmdNum")
+    for (i = 3; i >= 0; i--) {
       messageSize |= (Serial.read() << (8 * i));
     }
+	DBG("Got serialread")
 
     if (DEBUG) Serial.printf("d:%d, o:%d, cmd:%d, size:%d\n", destID, origID, cmdNum, messageSize);
 

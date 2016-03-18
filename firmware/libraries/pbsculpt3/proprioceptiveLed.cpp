@@ -21,22 +21,13 @@ ProprioceptiveLed::ProprioceptiveLed(char port):
 
 void ProprioceptiveLed::init(){
 	DBGLN("Initializing ProprioceptiveLed.");
-	getPinForAddress(LED_ADDRESS);
-	DBGLN("LED PIN.");
-	hasFastPWMForAddress(LED_ADDRESS);
-	DBGLN("LED PWM.");
     HighPowerLED* led = new HighPowerLED(LED_ADDRESS,
     		getPinForAddress(LED_ADDRESS), hasFastPWMForAddress(LED_ADDRESS));
     peripherals.add(led);
-	DBGLN("Initialized LED, now PHOTO.");
-	getPinForAddress(PHOTO_ADDRESS);
-	DBGLN("PHOTO PIN.");
-	hasFastPWMForAddress(PHOTO_ADDRESS);
-	DBGLN("PHOTO PWM.");
+
     AmbientLightSensor* ambientLight = new AmbientLightSensor(PHOTO_ADDRESS,
     		getPinForAddress(PHOTO_ADDRESS), hasFastPWMForAddress(PHOTO_ADDRESS));
     peripherals.add(ambientLight);
-	DBGLN("Finished Initializing ProprioceptiveLed.");
 }
 
 void ProprioceptiveLed::loop(){

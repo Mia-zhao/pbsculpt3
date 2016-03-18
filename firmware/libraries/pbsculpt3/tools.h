@@ -10,11 +10,12 @@
 
 #include <Arduino.h>
 
-#define DEBUG 1
+#define DEBUG 0
 
-#define DEBUG_DELAY 100
+#define DEBUG_DELAY 10
 
 #define DBG(msg) if (DEBUG){ Serial.print(msg); delay(DEBUG_DELAY); } // Was seizing up before message had a chance to print, so hence the delay ***MAKE A NOTE ABOUT THIS***
 #define DBGLN(msg) if (DEBUG){ Serial.println(msg); delay(DEBUG_DELAY); }
+#define DBGF(msg) if (DEBUG){ Serial.printf(msg); delay(DEBUG_DELAY); }
 
 #endif /* TOOLS_H_ */
