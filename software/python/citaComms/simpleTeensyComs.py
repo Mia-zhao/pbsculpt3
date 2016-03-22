@@ -144,7 +144,7 @@ def ParseReadResponse(respStr):
     readDevId = int.from_bytes(respStr[0:3],byteorder='big') #this is wrong
     procType = respStr[3]  #should do some error checking to make sure this is what was requested
     readval = int.from_bytes(respStr[4:6], byteorder='big')
-    print('The sensor reading is',readval)
+    #print('The sensor reading is',readval)
     return readval
 
 
