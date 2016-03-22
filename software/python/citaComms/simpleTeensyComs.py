@@ -47,7 +47,7 @@ def ReadFromSerial(ser):
         if numBytes > 0:
             r1 = ser.read_all()
             sendUDP(r1)
-            print(r1)
+            #print(r1)
             resp = bytearray(r1)
         else:
             raise ConnectionError("No data at serial port. Did you forget to close TyQT or the Arduino Serial Monitor?")
@@ -170,5 +170,5 @@ def CBLAStatusReport(myId, destListener, CBLANodeId, numExperts, maxActionValue)
     cmd += numExperts.to_bytes(1,'big')
     m = int(abs(10000*maxActionValue))
     cmd += m.to_bytes(2,'big')
-    print(cmd)
+    #print(cmd)
     sendUDP(cmd)
