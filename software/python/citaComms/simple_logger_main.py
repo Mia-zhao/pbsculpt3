@@ -2,10 +2,12 @@
 
 Starts a python process that turns the various actuators on randomly and logs the sensor readings to an sqlite database.
 '''
+from datetime import datetime
 import random
 import time
 
 import simpleTeensyComs
+from pymongo import MongoClient
 
 SLEEP_LENGTH = 1
 
@@ -14,6 +16,7 @@ origin = -1
 teensyComms = None
 actuators = {} # Dict containting the device and its most recent reading
 sensors = {}
+db = None
 
 def simple_logger_setup(args):
     ''' Run the simple logger setup
@@ -21,7 +24,7 @@ def simple_logger_setup(args):
     :type args: object
     :return: None
     '''
-    global destination, origin, teensyComms, actuators, sensors
+    global destination, origin, teensyComms, actuators, sensors, db
 
     print(args)
 
@@ -43,6 +46,10 @@ def simple_logger_setup(args):
         else:
             actuators[devices[i]] = 0
 
+    # Set up the database
+    client = MongoClient()
+    db = client.USBStressTest
+
 def simple_logger_loop():
     ''' Run the simple logger loop
 
@@ -53,8 +60,24 @@ def simple_logger_loop():
         actuators[actuator] = random.randint(0, 15)
         simpleTeensyComs.Fade(teensyComms, destination, origin, actuator.genByteStr(), int(actuators[actuator]),0)
 
+        db.readings.insert_one({
+            'datetime': datetime.now(),
+            'address': actuator.address,
+            'type': actuator.type,
+            'port': actuator.port,
+            'value': actuators[actuator],
+        })
+
     for sensor in sensors:
         sensors[sensor] = simpleTeensyComs.Read(teensyComms, destination, origin, sensor.genByteStr(), 0)
+
+        db.readings.insert_one({
+            'datetime': datetime.now(),
+            'address': sensor.address,
+            'type': sensor.type,
+            'port': sensor.port,
+            'value': sensors[sensor],
+        })
 
 if __name__ == '__main__':
 
