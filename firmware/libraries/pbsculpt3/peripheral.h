@@ -8,6 +8,7 @@
 #ifndef __DEVICE_H
 #define __DEVICE_H
 
+#define DEVICE_TYPE_SMA 1
 #define DEVICE_TYPE_HIGH_POWER_LED 5
 #define DEVICE_TYPE_PHOTO_SENSOR 6
 
