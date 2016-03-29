@@ -17,7 +17,7 @@ UDPSend = True
 UDP_IP = "10.1.45.171"
 UDP_PORT = 6000
 udp_node_id = 33333
-sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+#sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 
 
 #Command definitions
@@ -26,21 +26,24 @@ QUERYIDS = 2
 FADE = 3
 READ = 4
 
-
 def sendUDP(msg):
-    if UDPSend == True:
-        sock.sendto(msg, (UDP_IP, UDP_PORT))
+    pass
+    #if UDPSend == True:
+    #    sock.sendto(msg, (UDP_IP, UDP_PORT))
 
 
 #Function to initialize the serial port
-def initializeComms(CoMId, timeout = 1):
+'''
+@param timeout The timeout for USB Read in seconds
+'''
+def initializeComms(CoMId, timeout = 0.1):
     ser = serial.Serial(CoMId)
     ser.timeout = timeout
     return ser
 
 def ReadFromSerial(ser):
     #print("Sleeping...")
-    time.sleep(1)
+    time.sleep(ser.timeout)
     #print("Waking...")
     if ser.is_open:
         numBytes = ser.in_waiting
