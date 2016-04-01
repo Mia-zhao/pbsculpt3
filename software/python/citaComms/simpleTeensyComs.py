@@ -8,6 +8,8 @@ import socket
 #teensy_sernum = 69029 #107935 #69029
 #teensy_comport = "COM4"
 
+TIMEOUT_SECONDS = 0.1
+
 #CBLA setup
 cbla_pc_id = 22222
 
@@ -36,7 +38,7 @@ def sendUDP(msg):
 '''
 @param timeout The timeout for USB Read in seconds
 '''
-def initializeComms(CoMId, timeout = 0.1):
+def initializeComms(CoMId, timeout = TIMEOUT_SECONDS):
     ser = serial.Serial(CoMId)
     ser.timeout = timeout
     return ser
@@ -53,7 +55,7 @@ def ReadFromSerial(ser):
             #print(r1)
             resp = bytearray(r1)
         else:
-            raise ConnectionError("No data at serial port. Did you forget to close TyQT or the Arduino Serial Monitor?")
+            raise ConnectionError("No data at serial port (%s). Did you forget to close TyQT or the Arduino Serial Monitor?" %ser.port)
     else:
             raise ConnectionError("Serial port not open. Did you forget to close TyQT or the Arduino Serial Monitor?")
 

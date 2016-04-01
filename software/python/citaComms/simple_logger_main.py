@@ -5,6 +5,7 @@ Starts a python process that turns the various actuators on randomly and logs th
 from datetime import datetime
 import random
 import time
+from serial.tools import list_ports
 
 import simpleTeensyComs
 from pymongo import MongoClient
@@ -20,6 +21,23 @@ db = None
 
 loop_count = 0
 
+def map_ports(serials):
+    '''Map ports to serial number listings
+
+    :type serials: List of serial numbers
+    :return: Dictionary of port mappings {serialNumber:port}
+    
+    :todo: Is this cross-platform friendly?
+    '''
+    port_mapping = {}
+    for port, pname, desc in list_ports.comports():
+        if desc.split()[0] == 'USB':
+            snr = desc.split()[2].split('=')[1][:-1]
+            
+            port_mapping[int(snr)] = port
+            
+    return port_mapping
+
 def simple_logger_setup(args):
     ''' Run the simple logger setup
 
@@ -31,11 +49,13 @@ def simple_logger_setup(args):
     print(args)
 
     # Unpack the input arguments
-    serials = dict(args.teensy).keys()
+    serials = args.teensy
     origin = args.comp_serial
     Grasshopper = args.grasshopper_serial
     # A Dict of the communications in the form of SERIAL_NUMBER: CONNECTION
-    teensyComms = dict([(sn, simpleTeensyComs.initializeComms(port)) for sn, port in args.teensy])
+    print( map_ports(serials) )
+    portmap = map_ports(serials)
+    teensyComms = dict([(sn, simpleTeensyComs.initializeComms(portmap[sn])) for sn in portmap])
 
     for sn in teensyComms:
         # Set up the Teensy communications
@@ -111,12 +131,10 @@ def port_serial_type(port_serial_string):
 
 if __name__ == '__main__':
 
-    try:
-
         import argparse
 
         parser = argparse.ArgumentParser(description='Start a simple logging process using random outputs and logging the inputs.')
-        parser.add_argument('--teensy', dest='teensy', type=port_serial_type, help='The Teensy locations in the form SERIALNUMBER|PORT.', nargs='+')
+        parser.add_argument('--teensy', dest='teensy', type=str, help='The Teensy serial numbers.', nargs='+')
         parser.add_argument('comp_serial', type=int, help='The computers serial number for the purposes of simulation [22222]',
                            default=simpleTeensyComs.cbla_pc_id, nargs='?' )
         parser.add_argument('grasshopper_serial', type=int, help='The Grasshopper nodes serial number for the purposes of simulation [33333]',
@@ -138,6 +156,6 @@ if __name__ == '__main__':
         except KeyboardInterrupt:
             shutdown()
 
-    except Exception as e:
-        shutdown()
-        print(e)
+        except Exception as e:
+            shutdown()
+            print(e)
