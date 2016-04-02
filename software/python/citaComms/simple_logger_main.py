@@ -93,6 +93,9 @@ def simple_logger_loop():
     for sn in teensyComms:
         for actuator in actuators[sn]:
             actuators[sn][actuator] = random.randint(0, 15)
+
+            print(teensyComms[sn], actuator.genByteStr(), sn, origin)
+
             simpleTeensyComs.Fade(teensyComms[sn], sn, origin, actuator.genByteStr(), int(actuators[sn][actuator]),0)
 
             db.readings.insert_one({

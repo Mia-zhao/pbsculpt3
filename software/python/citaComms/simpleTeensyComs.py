@@ -8,7 +8,7 @@ import socket
 #teensy_sernum = 69029 #107935 #69029
 #teensy_comport = "COM4"
 
-TIMEOUT_SECONDS = 0.1
+TIMEOUT_SECONDS = 0.01
 
 #CBLA setup
 cbla_pc_id = 22222
@@ -45,7 +45,7 @@ def initializeComms(CoMId, timeout = TIMEOUT_SECONDS):
 
 def ReadFromSerial(ser):
     #print("Sleeping...")
-    time.sleep(ser.timeout)
+    #time.sleep(ser.timeout)
     #print("Waking...")
     if ser.is_open:
         numBytes = ser.in_waiting
@@ -135,6 +135,10 @@ def QueryIDs(tSerConnection, destTeensy, myId):
     else:
         return parseQueryIDResponse(msg)
 
+'''
+:param tSerConnection
+:param destTeensy
+'''
 def Fade(tSerConnection, destTeensy, myId, deviceId, targetValue, speed):
     cmd = bytearray()
     cmd += deviceId
@@ -151,8 +155,6 @@ def ParseReadResponse(respStr):
     readval = int.from_bytes(respStr[4:6], byteorder='big')
     #print('The sensor reading is',readval)
     return readval
-
-
 
 def Read(tSerConnection, destTeensy, myId, deviceId, prepType):
     cmd = bytearray()
