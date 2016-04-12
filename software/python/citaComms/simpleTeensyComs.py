@@ -8,7 +8,7 @@ import socket
 #teensy_sernum = 69029 #107935 #69029
 #teensy_comport = "COM4"
 
-TIMEOUT_SECONDS = 0.1
+TIMEOUT_SECONDS = 1.0
 
 #CBLA setup
 cbla_pc_id = 22222

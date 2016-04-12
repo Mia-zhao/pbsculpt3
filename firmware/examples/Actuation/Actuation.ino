@@ -12,6 +12,8 @@
 
  */
 
+#define DEBUG 0
+
 #include "Arduino.h"
 #include "tools.h"
 #include "device_types.h"
@@ -63,11 +65,11 @@ void setup() {
 	DBG(".");
 	node.devices[2] = new EmptyDeviceModule(3);
 	DBG(".");
-	node.devices[3] = new ProprioceptiveLed(4);
+	node.devices[3] = new EmptyDeviceModule(4);
 	DBG(".");
 	node.devices[4] = new ProprioceptiveLed(5);
 	DBG(".");
-	node.devices[5] = new ProprioceptiveLed(6);
+	node.devices[5] = new EmptyDeviceModule(6);
 	DBGLN(".");
 
 	node.init();
@@ -97,6 +99,10 @@ void loop() {
 	doHeartbeat();
 
 	delay(1);
+  /*int fadeto = 100;//random(0, 150);
+  node.devices[4]->fade(fadeto, 1, 0);
+  node.devices[5]->fade(fadeto, 1, 0);
+  node.devices[6]->fade(fadeto, 1, 0);*/
 }
 
 void doHeartbeat() {
@@ -201,19 +207,22 @@ uint8_t getNumDevices() {
 // Load the Device Addresses into an array
 // Return the length of the array
 //TODO this needs to pull from the device info that we have.
+const int N_DEV = 3;
+const int N_FIELD = 3;
+const int START_PORT = 3; // Starting port, 0-indexed
 int loadAddresses(uint8_t *addresses) {
 	//hacked together. should be replaced.
 	// test case:
-	for (int i = 0; i < 3; i++) {
-		addresses[3 * i] = i + 1 + 3;
-		addresses[3 * i + 1] = DEVICE_TYPE_HIGH_POWER_LED;
-		addresses[3 * i + 2] = 1;
+	for (int i = 0; i < N_DEV; i++) {
+		addresses[N_FIELD * i] = i + 1 + START_PORT;
+		addresses[N_FIELD * i + 1] = DEVICE_TYPE_HIGH_POWER_LED;
+		addresses[N_FIELD * i + 2] = 1;
 	}
 
-	for (int i = 0; i < 3; i++) {
-		addresses[3*3 + 3 * i] = i + 1 + 3;
-		addresses[3*3 + 3 * i + 1] = DEVICE_TYPE_PHOTO_SENSOR;
-		addresses[3*3 + 3 * i + 2] = 5;
+	for (int i = 0; i < N_DEV; i++) {
+		addresses[N_DEV*N_FIELD + N_FIELD * i] = i + 1 + START_PORT;
+		addresses[N_DEV*N_FIELD + N_FIELD * i + 1] = DEVICE_TYPE_PHOTO_SENSOR;
+		addresses[N_DEV*N_FIELD + N_FIELD * i + 2] = 5;
 	}
 
 	return 3 * 3 * 2;
