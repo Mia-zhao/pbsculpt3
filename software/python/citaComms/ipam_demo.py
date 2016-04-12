@@ -34,9 +34,11 @@ RESTING_DECAY_FRACTION = 0.75
 
 # Light Sensor Variables
 running_avg_light = 0
+lt_running_avg_light = 0
 decaying_light_max = 0
 decaying_light_min = 0
 RUNNING_AVG_DECAY_FRACTION = 0.75
+LONG_TERM_RUNNING_AVG_DECAY = 0.95
 MINMAX_DECAY_FRACTION = 0.05 # Not the same kind of decay
 
 # Graphing variables
@@ -108,7 +110,7 @@ def simple_logger_loop():
     :return:
     '''
 
-    global state, STATES, activation_bucket, ACTIVATION_DECAY_FRACTION, ACTIVATION_MAX, RESTING_DECAY_FRACTION, running_avg_light, decaying_light_max, decaying_light_min, RUNNING_AVG_DECAY_FRACTION, MINMAX_DECAY_FRACTION
+    global state, STATES, activation_bucket, ACTIVATION_DECAY_FRACTION, ACTIVATION_MAX, RESTING_DECAY_FRACTION, running_avg_light, decaying_light_max, decaying_light_min, RUNNING_AVG_DECAY_FRACTION, MINMAX_DECAY_FRACTION, lt_running_avg_light, LONG_TERM_RUNNING_AVG_DECAY
 
     USED_PORT = 5
 
@@ -125,7 +127,10 @@ def simple_logger_loop():
                 range_light = decaying_light_max - decaying_light_min
 
                 try:
-                    actuators[sn][actuator] = abs( midpt - running_avg_light ) * 150 / range_light
+                    difference = abs(lt_running_avg_light - running_avg_light)
+                    actuators[sn][actuator] = 125 * difference / abs(decaying_light_max - decaying_light_min)
+
+                    print('MID: ', running_avg_light, lt_running_avg_light, difference, abs(lt_running_avg_light - decaying_light_min), abs(lt_running_avg_light - decaying_light_max))
                 except ZeroDivisionError:
                     actuators[sn][actuator] = 0
 
@@ -166,6 +171,8 @@ def simple_logger_loop():
             sensors[sn][sensor] = simpleTeensyComs.Read(teensyComms[sn], sn, origin, sensor.genByteStr(), 0)
 
             running_avg_light = running_avg_light * RUNNING_AVG_DECAY_FRACTION + sensors[sn][sensor] * (1.0-RUNNING_AVG_DECAY_FRACTION)
+            lt_running_avg_light = lt_running_avg_light * LONG_TERM_RUNNING_AVG_DECAY + sensors[sn][sensor] * (
+                1.0 - LONG_TERM_RUNNING_AVG_DECAY)
 
             # decay max/min
             decaying_light_max = decaying_light_max - abs(decaying_light_max-running_avg_light) * MINMAX_DECAY_FRACTION
