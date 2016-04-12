@@ -15,11 +15,11 @@ cbla_pc_id = 22222
 
 #setup for UDP transmitting
 UDPSend = True
-#UDP_IP = "127.0.0.1"
-UDP_IP = "10.1.45.171"
+UDP_IP = "127.0.0.1"
+#UDP_IP = "10.1.45.171"
 UDP_PORT = 6000
 udp_node_id = 33333
-#sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 
 
 #Command definitions
@@ -30,8 +30,8 @@ READ = 4
 
 def sendUDP(msg):
     pass
-    #if UDPSend == True:
-    #    sock.sendto(msg, (UDP_IP, UDP_PORT))
+    if UDPSend == True:
+        sock.sendto(msg, (UDP_IP, UDP_PORT))
 
 
 #Function to initialize the serial port

@@ -3,7 +3,7 @@
 Starts a python process that turns the various actuators on randomly and logs the sensor readings to an sqlite database.
 '''
 from datetime import datetime
-import random
+import socket
 import time
 from serial.tools import list_ports
 
@@ -41,7 +41,11 @@ RUNNING_AVG_DECAY_FRACTION = 0.75
 LONG_TERM_RUNNING_AVG_DECAY = 0.95
 MINMAX_DECAY_FRACTION = 0.05 # Not the same kind of decay
 
-# Graphing variables
+# UDP variables
+#setup for UDP transmitting
+UDP_IP = "127.0.0.1"
+UDP_PORT = 6001
+sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 
 def map_ports(serials):
     '''Map ports to serial number listings
@@ -164,6 +168,12 @@ def simple_logger_loop():
                     state = STATES['ACTIVE']
 
                 values.append(0)
+
+            sock.sendto(('value:%d' % actuators[sn][actuator]).encode('UTF-8'), (UDP_IP, UDP_PORT))
+            sock.sendto(('bucket:%d' % activation_bucket).encode('UTF-8'), (UDP_IP, UDP_PORT))
+            sock.sendto(('decaying_light_min:%d' % decaying_light_min).encode('UTF-8'), (UDP_IP, UDP_PORT))
+            sock.sendto(('decaying_light_max:%d' % decaying_light_max).encode('UTF-8'), (UDP_IP, UDP_PORT))
+            sock.sendto(('running_avg_light:%d' % running_avg_light).encode('UTF-8'), (UDP_IP, UDP_PORT))
 
         print('State: ', state, ' ', activation_bucket, decaying_light_min, running_avg_light, decaying_light_max)
 
