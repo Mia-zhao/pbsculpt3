@@ -30,3 +30,7 @@
 
 # Eclipse settings folder
 *.settings
+*.ino.cpp
+
+# Python
+__pycache__
