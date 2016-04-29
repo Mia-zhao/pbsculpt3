@@ -156,10 +156,15 @@ void xbee_getSerial(){
 	  }
 	}
 
+	printXBeeSerial();
+}
+
+void printXBeeSerial(){
 	Serial.print("Serial Number: ");
 	for(int i=0; i<8; i++){
 		Serial.print(xbeeSerialNumber[i], HEX);
 	}
+	Serial.println();
 }
 
 void sendAtCommand() {
@@ -229,7 +234,9 @@ void xbee_loop(){
             	Serial.println("Ping...");
             } else if (data[0] == 0x01) {
             	Serial.println("Got one...");
-            }
+            } else if (data[0] == 0x02) {
+				printXBeeSerial();
+			}
         }
     }
 }
