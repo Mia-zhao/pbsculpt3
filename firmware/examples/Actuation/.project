@@ -47,6 +47,11 @@
 			<location>/usr/local/src/arduino-1.6.7/hardware/teensy/avr/cores/teensy3</location>
 		</link>
 		<link>
+			<name>libraries/XBee</name>
+			<type>2</type>
+			<location>/usr/local/src/arduino-1.6.7/hardware/teensy/avr/libraries/XBee</location>
+		</link>
+		<link>
 			<name>libraries/i2c_t3</name>
 			<type>2</type>
 			<location>/usr/local/src/arduino-1.6.7/hardware/teensy/avr/libraries/i2c_t3</location>

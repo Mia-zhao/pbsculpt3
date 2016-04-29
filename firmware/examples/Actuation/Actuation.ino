@@ -12,6 +12,8 @@
 
  */
 
+#define __USE_XBEE__ 1
+
 #include "Arduino.h"
 #include "tools.h"
 #include "device_types.h"
@@ -35,6 +37,20 @@ Node node(111111);
 bool heartbeatOn = false;
 elapsedMillis heartbeatTimer;
 
+#if __USE_XBEE__
+#include <XBee.h>
+XBee xbee = XBee();
+XBeeResponse response = XBeeResponse();
+// create reusable response objects for responses we expect to handle
+ZBRxResponse rx = ZBRxResponse();
+
+uint8_t xbeeSerialNumber[8] = {0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF};
+
+uint8_t shCmd[] = {'S','H'};// serial low
+AtCommandRequest atRequest = AtCommandRequest(shCmd);
+AtCommandResponse atResponse = AtCommandResponse();
+#endif
+
 void setup() {
 
 	pinMode(LED_BUILTIN, OUTPUT);
@@ -57,18 +73,18 @@ void setup() {
 	DBG("Booting");
 
 	// put your setup code here, to run once:
-	node.devices[0] = new EmptyDeviceModule(1);
+	node.devices[0] = new ProprioceptiveLed(1);
 	DBG(".");
-	node.devices[1] = new EmptyDeviceModule(2);
+	node.devices[1] = new ProprioceptiveLed(2);
 	DBG(".");
-	node.devices[2] = new EmptyDeviceModule(3);
-	DBG(".");
-	node.devices[3] = new ProprioceptiveLed(4);
-	DBG(".");
-	node.devices[4] = new ProprioceptiveLed(5);
-	DBG(".");
-	node.devices[5] = new ProprioceptiveLed(6);
+	node.devices[2] = new ProprioceptiveLed(3);
 	DBGLN(".");
+	node.devices[3] = new EmptyDeviceModule(4);
+	DBG(".");
+	node.devices[4] = new EmptyDeviceModule(5);
+	DBG(".");
+	node.devices[5] = new EmptyDeviceModule(6);
+	DBG(".");
 
 	node.init();
 	DBG("Getting Serial Number");
@@ -78,6 +94,11 @@ void setup() {
 #if DEBUG
 	sCmd.addCommand("NDEV", cmdQueryNumDevices); // Finds the number of devices present.
 #endif
+
+#if __USE_XBEE__
+	xbee_setup();
+#endif
+
 	//Serial.println("Done booting. Awaiting commands, Master...");
 }
 
@@ -96,8 +117,124 @@ void loop() {
 
 	doHeartbeat();
 
+#if __USE_XBEE__
+	xbee_loop();
+#endif
+
 	delay(1);
 }
+
+#if __USE_XBEE__
+void xbee_setup(){
+	Serial1.begin(9600);
+	delay(1000);
+	xbee.begin(Serial1);
+	delay(1000);
+
+	xbee_getSerial();
+}
+
+void xbee_getSerial(){
+	uint8_t slCmd[] = {'S','L'};// serial high
+
+	// Get High Numbers
+	sendAtCommand();
+
+	if (atResponse.getValueLength() == 4) {
+	  for (int i = 0; i < atResponse.getValueLength(); i++) {
+		  xbeeSerialNumber[i] = atResponse.getValue()[i];
+	  }
+	}
+
+	// Get Low Numbers
+	atRequest.setCommand(slCmd);
+	sendAtCommand();
+
+	if (atResponse.getValueLength() == 4) {
+	  for (int i = 0; i < atResponse.getValueLength(); i++) {
+		  xbeeSerialNumber[i+4] = atResponse.getValue()[i];
+	  }
+	}
+
+	Serial.print("Serial Number: ");
+	for(int i=0; i<8; i++){
+		Serial.print(xbeeSerialNumber[i], HEX);
+	}
+}
+
+void sendAtCommand() {
+  Serial.println("Sending command to the XBee");
+
+  // send the command
+  xbee.send(atRequest);
+
+  // wait up to 5 seconds for the status response
+  if (xbee.readPacket(5000)) {
+    // got a response!
+
+    // should be an AT command response
+    if (xbee.getResponse().getApiId() == AT_COMMAND_RESPONSE) {
+      xbee.getResponse().getAtCommandResponse(atResponse);
+
+      if (atResponse.isOk()) {
+		  Serial.print("Command [");
+		  Serial.print(atResponse.getCommand()[0]);
+		  Serial.print(atResponse.getCommand()[1]);
+		  Serial.println("] was successful!");
+
+        if (atResponse.getValueLength() > 0) {
+        	Serial.print("Command value length is ");
+        	Serial.println(atResponse.getValueLength(), DEC);
+
+        	Serial.print("Command value: ");
+
+          for (int i = 0; i < atResponse.getValueLength(); i++) {
+        	  Serial.print(atResponse.getValue()[i], HEX);
+        	  Serial.print(" ");
+          }
+
+          Serial.println("");
+        }
+      }
+      else {
+    	  Serial.print("Command return error code: ");
+    	  Serial.println(atResponse.getStatus(), HEX);
+      }
+    } else {
+    	Serial.print("Expected AT response but got ");
+    	Serial.print(xbee.getResponse().getApiId(), HEX);
+    }
+  } else {
+    // at command failed
+    if (xbee.getResponse().isError()) {
+    	Serial.print("Error reading packet.  Error code: ");
+    	Serial.println(xbee.getResponse().getErrorCode());
+    }
+    else {
+    	Serial.print("No response from radio");
+    }
+  }
+}
+
+void xbee_loop(){
+    xbee.readPacket();
+
+    if (xbee.getResponse().isAvailable()) {
+        if (xbee.getResponse().getApiId() == ZB_RX_RESPONSE) {
+            xbee.getResponse().getZBRxResponse(rx);
+
+            uint8_t * data = rx.getData();
+
+            if(data[0] == 0x00){
+            	Serial.println("Ping...");
+            } else if (data[0] == 0x01) {
+            	Serial.println("Got one...");
+            }
+        }
+    }
+}
+#endif
+
 
 void doHeartbeat() {
 	if (heartbeatTimer > 250) {
