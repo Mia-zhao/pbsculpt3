@@ -3,6 +3,9 @@
 *.lo
 *.o
 *.obj
+*.d
+Release
+Debug
 
 # Precompiled Headers
 *.gch
@@ -29,3 +32,11 @@
 
 # Eclipse settings folder
 *.settings
+*.ino.cpp
+
+# Compiled Documentation
+html
+xml
+
+# Python
+__pycache__
