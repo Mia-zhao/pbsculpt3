@@ -156,10 +156,15 @@ void xbee_getSerial(){
 	  }
 	}
 
+	printXBeeSerial();
+}
+
+void printXBeeSerial(){
 	Serial.print("Serial Number: ");
 	for(int i=0; i<8; i++){
 		Serial.print(xbeeSerialNumber[i], HEX);
 	}
+	Serial.println();
 }
 
 void sendAtCommand() {
