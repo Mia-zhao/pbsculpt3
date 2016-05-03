@@ -78,6 +78,10 @@ void Node::loop(){
 }
 
 int Node::deviceCount(){
+	return N_DEVICES;
+}
+
+int Node::peripheralCount(){
     
     int count = 0;
     for(int i=0; i<N_DEVICES; i++){

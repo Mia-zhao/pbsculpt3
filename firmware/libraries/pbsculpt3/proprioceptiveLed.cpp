@@ -73,7 +73,7 @@ int  ProprioceptiveLed::read(int address, int preprocessType){
 #include "pindefs.h"
 int ProprioceptiveLed::getPeripheralList(uint8_t* peripheralList, int position){
 	peripheralList[position] = _port;
-	peripheralList[position+1] = 3;
+	peripheralList[position+1] = 5;
 	peripheralList[position+2] = LED_ADDRESS;
 	peripheralList[position+3] = _port;
 	peripheralList[position+4] = 6;

@@ -10,7 +10,7 @@
 
 #define __MAX_SMA_ON_TIME 1000
 #define __MIN_SMA_OFF_TIME 1000
-#define __MAX_SMA_LEVEL 150
+#define __MAX_SMA_LEVEL 100
 
 #include "peripheral.h"
 #include "Arduino.h"

@@ -24,8 +24,9 @@ class Node {
         
         void init();
         void loop();
-        
+
         int deviceCount();
+        int peripheralCount();
         
         DeviceModule *devices[N_DEVICES];
         

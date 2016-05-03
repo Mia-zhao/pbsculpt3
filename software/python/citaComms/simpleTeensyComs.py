@@ -8,7 +8,7 @@ import socket
 #teensy_sernum = 69029 #107935 #69029
 #teensy_comport = "COM4"
 
-TIMEOUT_SECONDS = 0.1
+TIMEOUT_SECONDS = 1
 
 #CBLA setup
 cbla_pc_id = 22222
@@ -114,9 +114,20 @@ class DevInfo(object):
         return out_b_array
 
     def pr(self):
+        '''
+
+        Returns
+        -------
+        str
+            Address = #, Type = #, Port = #
+
+        .. note:: Deprecated
+        '''
+        return self.__str__()
+
+    def __str__(self):
         outstr = "Address = %d, Type = %d, Port = %d" % (self.address, self.type, self.port)
         return outstr
-
 
 
 def parseQueryIDResponse(respStr):
@@ -133,6 +144,7 @@ def QueryIDs(tSerConnection, destTeensy, myId):
     if msgsize == 0:
         print("No devices connected, message length is zero to QueryIDs prompt")
     else:
+        print( 'QueryIDs Reposnse: ', msg)
         return parseQueryIDResponse(msg)
 
 def Fade(tSerConnection, destTeensy, myId, deviceId, targetValue, speed):

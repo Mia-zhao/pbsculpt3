@@ -8,8 +8,8 @@
 #ifndef FINREFLEXDM_H_
 #define FINREFLEXDM_H_
 
-#define __RIGHT_SMA_ADDRESS 1
-#define __LEFT_SMA_ADDRESS	3
+#define __RIGHT_SMA_ADDRESS 3
+#define __LEFT_SMA_ADDRESS	4
 
 #include "deviceModule.h"
 
@@ -26,8 +26,9 @@ public:
 	int  read(int address, int preprocessType);
 
 	//
-	int getPeripheralList(uint8_t* peripheralList, int position);        /*TODO This is a hack and should not be here.
+	int getPeripheralList(uint8_t* peripheralList, int position);
 
+     /*TODO This is a hack and should not be here.
      * It is needed because the mapping from 8P line
      * to the device is not done properly.
      */

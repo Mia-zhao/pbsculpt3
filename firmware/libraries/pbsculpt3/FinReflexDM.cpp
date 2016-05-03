@@ -3,10 +3,15 @@
  *
  *  Created on: Mar 24, 2016
  *      Author: dkadish
+ *
+ * Differences from ProprioceptiveLED: define is in .h | 
  */
 
 #include "FinReflexDM.h"
 #include "FinSMA.h"
+
+#include "tools.h"
+#include <stdio.h>
 
 FinReflexDM::FinReflexDM(char port):
 	DeviceModule(port) {
@@ -22,8 +27,6 @@ void FinReflexDM::init(){
     		getPinForAddress(__LEFT_SMA_ADDRESS), hasFastPWMForAddress(__LEFT_SMA_ADDRESS));
     peripherals.add(leftSMA);
 }
-
-//EDIT BELOW HERE!
 
 void FinReflexDM::loop(){
 

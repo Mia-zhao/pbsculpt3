@@ -10,7 +10,7 @@ from serial.tools import list_ports
 import simpleTeensyComs
 from pymongo import MongoClient
 
-SLEEP_LENGTH = 1
+SLEEP_LENGTH = 0.1
 
 serials = []
 origin = -1
@@ -30,11 +30,14 @@ def map_ports(serials):
     :todo: Is this cross-platform friendly?
     '''
     port_mapping = {}
+    #print([(port, pname, desc) for port, pname, desc in list_ports.comports()])
     for port, pname, desc in list_ports.comports():
-        if desc.split()[0] == 'USB':
+        #print('%s | %s | %s' %(port, pname, desc))
+        if desc.split()[0] == 'USB' and pname == 'USB Serial':
             snr = desc.split()[2].split('=')[1][:-1]
-            
-            port_mapping[int(snr)] = port
+
+            if int(snr) in serials:
+                port_mapping[int(snr)] = port
             
     return port_mapping
 
@@ -60,18 +63,19 @@ def simple_logger_setup(args):
     for sn in teensyComms:
         # Set up the Teensy communications
         numDevices = simpleTeensyComs.QueryNumDevices(teensyComms[sn], sn, origin)
-        print('The teensy has', numDevices, 'devices')
-        devices = simpleTeensyComs.QueryIDs(teensyComms[sn], sn, origin)
+        print('The teensy (%s) has %d devices' %(sn, numDevices))
+        peripherals = simpleTeensyComs.QueryIDs(teensyComms[sn], sn, origin)
+        print(peripherals)
 
         sensors[sn] = {}
         actuators[sn] = {}
 
-        for i in range(len(devices)):
-            print(devices[i].pr())
-            if devices[i].type%2 == 0:
-                sensors[sn][devices[i]] = 0
+        for i in range(len(peripherals)):
+            print(peripherals[i])
+            if peripherals[i].type%2 == 0:
+                sensors[sn][peripherals[i]] = 0
             else:
-                actuators[sn][devices[i]] = 0
+                actuators[sn][peripherals[i]] = 0
 
     # Set up the database
     client = MongoClient()
@@ -92,7 +96,7 @@ def simple_logger_loop():
 
     for sn in teensyComms:
         for actuator in actuators[sn]:
-            actuators[sn][actuator] = random.randint(0, 15)
+            actuators[sn][actuator] = random.randint(0, 100)
             simpleTeensyComs.Fade(teensyComms[sn], sn, origin, actuator.genByteStr(), int(actuators[sn][actuator]),0)
 
             db.readings.insert_one({
@@ -134,11 +138,13 @@ if __name__ == '__main__':
         import argparse
 
         parser = argparse.ArgumentParser(description='Start a simple logging process using random outputs and logging the inputs.')
-        parser.add_argument('--teensy', dest='teensy', type=str, help='The Teensy serial numbers.', nargs='+')
+        parser.add_argument('--teensy', dest='teensy', type=int, help='The Teensy serial numbers.', nargs='+')
         parser.add_argument('comp_serial', type=int, help='The computers serial number for the purposes of simulation [22222]',
                            default=simpleTeensyComs.cbla_pc_id, nargs='?' )
         parser.add_argument('grasshopper_serial', type=int, help='The Grasshopper nodes serial number for the purposes of simulation [33333]',
                            default=simpleTeensyComs.udp_node_id, nargs='?' )
+        #parser.add_argument('-u', '--udp', type=bool, help='Connect to UDP?',
+        #                   default=False, action='store_true')
 
         args = parser.parse_args()
 

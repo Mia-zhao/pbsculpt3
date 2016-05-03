@@ -19,7 +19,7 @@
 #include "device_types.h"
 
 #include "node.h"
-#include "emptyDeviceModule.h"
+#include "FinReflexDM.h"
 #include "proprioceptiveLed.h"
 
 #if DEBUG
@@ -51,6 +51,10 @@ AtCommandRequest atRequest = AtCommandRequest(shCmd);
 AtCommandResponse atResponse = AtCommandResponse();
 #endif
 
+uint8_t dataOut[1000]; // This is of fixed size at the moment but these should probably be dynamic
+
+uint8_t getNumPeripherals();
+
 void setup() {
 
 	pinMode(LED_BUILTIN, OUTPUT);
@@ -73,18 +77,18 @@ void setup() {
 	DBG("Booting");
 
 	// put your setup code here, to run once:
-	node.devices[0] = new ProprioceptiveLed(1);
+	node.devices[0] = new FinReflexDM(1);
 	DBG(".");
-	node.devices[1] = new ProprioceptiveLed(2);
+	node.devices[1] = new FinReflexDM(2);
 	DBG(".");
-	node.devices[2] = new ProprioceptiveLed(3);
+	node.devices[2] = new FinReflexDM(3);
+	DBG(".");
+	node.devices[3] = new ProprioceptiveLed(4);
+	DBG(".");
+	node.devices[4] = new ProprioceptiveLed(5);
+	DBG(".");
+	node.devices[5] = new ProprioceptiveLed(6);
 	DBGLN(".");
-	node.devices[3] = new EmptyDeviceModule(4);
-	DBG(".");
-	node.devices[4] = new EmptyDeviceModule(5);
-	DBG(".");
-	node.devices[5] = new EmptyDeviceModule(6);
-	DBG(".");
 
 	node.init();
 	DBG("Getting Serial Number");
@@ -99,7 +103,28 @@ void setup() {
 	xbee_setup();
 #endif
 
-	//Serial.println("Done booting. Awaiting commands, Master...");
+	Serial.println("Done booting. Awaiting commands, Master...");
+
+	int nd = getNumDevices();
+
+	Serial.printf("Got %i devices\n", nd);
+
+	int np = getNumPeripherals();
+
+	Serial.printf("Got %i peripherals\n", np);
+
+	int pos = 0;
+	pos = loadAddresses(&dataOut[0]);
+
+	Serial.printf("Loaded Addresses in %i positions\n", pos);
+
+	for(int i=0; i<pos; i++){
+		if((i+1) % 3 == 0)
+			Serial.println(dataOut[i]);
+		else
+			Serial.print(dataOut[i]);
+	}
+
 }
 
 void loop() {
@@ -323,7 +348,7 @@ long int origID;
 long int messageSize;
 char cmdNum;            // uses char type so that it can be signed 7-bit number
 uint8_t dataIn[1000];
-uint8_t dataOut[1000]; // This is of fixed size at the moment but these should probably be dynamic
+//uint8_t dataOut[1000]; // This is of fixed size at the moment but these should probably be dynamic
 int numDevices; // 2 uint8_ts is enough to store the max # of devices = 6x(6+127)=798
 unsigned int sensorData; // assumes 2 uint8_ts is big enough to store sensor data
 int i;
@@ -337,7 +362,10 @@ long int serialCommSetup() {
 	return myID;
 }
 
-//TODO Fix this!
+uint8_t getNumPeripherals() {
+	return node.peripheralCount();
+}
+
 uint8_t getNumDevices() {
 	return node.deviceCount();
 }
@@ -348,7 +376,7 @@ uint8_t getNumDevices() {
 int loadAddresses(uint8_t *addresses) {
 	//hacked together. should be replaced.
 	// test case:
-	for (int i = 0; i < 3; i++) {
+	/*for (int i = 0; i < 3; i++) {
 		addresses[3 * i] = i + 1 + 3;
 		addresses[3 * i + 1] = DEVICE_TYPE_HIGH_POWER_LED;
 		addresses[3 * i + 2] = 1;
@@ -360,7 +388,18 @@ int loadAddresses(uint8_t *addresses) {
 		addresses[3*3 + 3 * i + 2] = 5;
 	}
 
-	return 3 * 3 * 2;
+	return 3 * 3 * 2;*/
+	int position = 0;
+
+	//Serial.printf("Loading addresses from %d devices\n", getNumDevices());
+
+	for( int i=0; i<getNumDevices(); i++ ){
+		// Loop over each device
+		position = node.devices[i]->getPeripheralList(addresses, position);
+		//Serial.printf("Finished loading addresses from %d of %d devices and am at position %d\n", i, getNumDevices(), position);
+	}
+
+	return position;
 }
 
 //dataIn[0] > port, dataIn[1] > type, dataIn[2] > address, dataIn[3] > value, dataIn[4] > duration
@@ -449,7 +488,7 @@ void serialCommLoop() {
 		if (cmdNum == QueryNumDevices) { // return the number of devices on the Teensy Node
 			if (DEBUG)
 				Serial.printf("Getting NumDevices...\n");
-			dataOut[0] = getNumDevices();
+			dataOut[0] = getNumPeripherals();
 			if (DEBUG)
 				Serial.printf("Sending num devices %i\n", dataOut[0]);
 			sendMessage(origID, -cmdNum, 1);
