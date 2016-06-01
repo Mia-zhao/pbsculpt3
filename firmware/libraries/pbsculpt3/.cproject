@@ -23,13 +23,13 @@
 							</builder>
 							<tool id="it.baeyens.arduino.tool.sketch.compiler.cpp.230972217" name="Arduino C++ Compiler" superClass="it.baeyens.arduino.tool.sketch.compiler.cpp">
 								<option id="it.baeyens.arduino.compiler.cpp.sketch.option.incpath.12691385" name="Include Paths (-I)" superClass="it.baeyens.arduino.compiler.cpp.sketch.option.incpath" valueType="includePath">
-									<listOptionValue builtIn="false" value="/home/dkadish/workspace/pbsculpt3/firmware/libraries/pbsculpt3/pbsculpt3/pbsculpt3"/>
 									<listOptionValue builtIn="false" value="/home/dkadish/Arduino/libraries"/>
 									<listOptionValue builtIn="false" value="/home/dkadish/Documents/Arduino/libraries"/>
 									<listOptionValue builtIn="false" value="/usr/local/src/arduino-1.6.7/libraries"/>
 									<listOptionValue builtIn="false" value="/usr/local/src/arduino-1.6.7/hardware/teensy/avr/libraries"/>
 									<listOptionValue builtIn="false" value="/usr/local/src/arduino-1.6.7/hardware/teensy/avr/cores/teensy3"/>
 									<listOptionValue builtIn="false" value="/usr/local/src/arduino-1.6.7/hardware/tools/arm/arm-none-eabi/include"/>
+									<listOptionValue builtIn="false" value="/home/dkadish/workspace/pbsculpt3/firmware/libraries/pbsculpt3/"/>
 								</option>
 								<inputType id="it.baeyens.arduino.compiler.cpp.sketch.input.778355932" name="CPP source files" superClass="it.baeyens.arduino.compiler.cpp.sketch.input"/>
 							</tool>

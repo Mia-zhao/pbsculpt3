@@ -12,7 +12,10 @@
 #ifndef BEHAVIOUR_H_
 #define BEHAVIOUR_H_
 
+#define DEBUG_BEHAVIOUR 1
+
 #include <LinkedList.h>
+#include <elapsedMillis.h>
 
 enum BehaviourState {
 	STOPPED,
@@ -49,7 +52,7 @@ public:
 	void reset();
 
 	// Set limitations for behaviour
-	void setMaxValue( long value );
+	void setMaxValue( unsigned long value );
 
 	// Set multipliers and dividers
 	void setTimeMultiplier( int mux );
@@ -57,26 +60,27 @@ public:
 	void setValueMultiplier( int mux);
 	void setValueDivisor(int div);
 
-    LinkedList<long*> points;
+    LinkedList<unsigned long*> points;
 
 private:
-    long currentPointStartTime();
-    long nextPointStartTime();
+    unsigned long currentPointStartTime();
+    unsigned long nextPointStartTime();
 
     /** Advance to the next set of control points.
      *
      *	@return Boolean indicating whether there are more points in the behaviour definition.
      */
     bool advancePoint();
+    bool loadPoints();
 
-	elapsedMillis _runTime;
-	long _pauseTime;
+	elapsedMicros _runTime;
+	unsigned long _pauseTime;
 
 	/** Pointer towards a 2D array of points in the format [time, value]
 	 *
 	 *	@description
 	 */
-	long _maxValue;
+	unsigned long _maxValue;
 
 	int _timeMux, _timeDiv;
 	int _valueMux, _valueDiv;
@@ -85,7 +89,7 @@ private:
 	BehaviourState _state;
 	int _i_lastPoint;
 
-	long *_lastPoint, *_nextPoint;
+	unsigned long *_lastPoint, *_nextPoint;
 };
 
 #endif /* BEHAVIOUR_H_ */
