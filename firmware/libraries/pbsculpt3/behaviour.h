@@ -12,7 +12,7 @@
 #ifndef BEHAVIOUR_H_
 #define BEHAVIOUR_H_
 
-#define DEBUG_BEHAVIOUR 1
+#define DEBUG_BEHAVIOUR 0
 
 #include <LinkedList.h>
 #include <elapsedMillis.h>
@@ -21,6 +21,11 @@ enum BehaviourState {
 	STOPPED,
 	PLAYING,
 	PAUSED
+};
+
+struct Point {
+	unsigned long time;
+	unsigned long value;
 };
 
 class Behaviour {
@@ -60,7 +65,7 @@ public:
 	void setValueMultiplier( int mux);
 	void setValueDivisor(int div);
 
-    LinkedList<unsigned long*> points;
+    LinkedList<Point*> points;
 
 private:
     unsigned long currentPointStartTime();
@@ -89,7 +94,7 @@ private:
 	BehaviourState _state;
 	int _i_lastPoint;
 
-	unsigned long *_lastPoint, *_nextPoint;
+	Point *_lastPoint, *_nextPoint;
 };
 
 #endif /* BEHAVIOUR_H_ */

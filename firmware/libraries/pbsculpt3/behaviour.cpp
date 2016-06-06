@@ -26,7 +26,7 @@ Behaviour::Behaviour():
 	_nextPoint(0)
 	{
 
-    points = LinkedList<unsigned long*>();
+    points = LinkedList<Point*>();
 }
 
 Behaviour::~Behaviour() {
@@ -45,6 +45,9 @@ void Behaviour::loop(){
 		}
 		break;
 	}
+#if DEBUG_BEHAVIOUR > 2
+	Serial.printf("BEHAVIOUR: Looping... Value at %d, State %d\n", (int)value(), (int)_state);
+#endif
 }
 
 int Behaviour::value(){
@@ -52,14 +55,20 @@ int Behaviour::value(){
 	switch(_state){
 	case PLAYING:
 	{
-		long t_1 = _lastPoint[0];
-		long t_2 = _nextPoint[0];
-		long v_1 = _lastPoint[1];
-		long v_2 = _lastPoint[1];
-
+		long t_1 = _lastPoint->time;
+		long t_2 = _nextPoint->time;
+		long v_1 = (long) _lastPoint->value;
+		long v_2 = (long) _nextPoint->value;
 		long v_d = v_2 - v_1;
 		long t_d = t_2 - t_1;
-		val = v_1 + v_d * (_runTime - t_1) / t_d;
+		long t_from_last = _runTime - t_1;
+		val = v_1 + (v_d * t_from_last) / t_d;
+
+#if DEBUG_BEHAVIOUR > 3
+	Serial.printf("BEHAVIOUR: Value Difference %d - %d = %d\n", v_2, v_1, v_d);
+	Serial.printf("BEHAVIOUR: Time Difference %d - %d = %d\n", t_2, t_1, t_d);
+	Serial.printf("BEHAVIOUR: Value %d + ( %d * %d ) / %d = %d\n", v_1, v_d, t_from_last, t_d, val);
+#endif
 	}
 	}
 
@@ -137,35 +146,40 @@ void Behaviour::setValueDivisor(int div){
 }
 
 unsigned long Behaviour::nextPointStartTime(){
-#if DEBUG_BEHAVIOUR
+#if DEBUG_BEHAVIOUR > 3
 	Serial.printf(
-			"BEHAVIOUR: Next point starts at %d microseconds (%d current, %d next, %d last, %d timeX, %dtimeoX)\n",
-			(_nextPoint[0] * _timeMux) / _timeDiv, (int) _runTime,
-			_nextPoint[0], _lastPoint[0], _timeMux, _timeDiv
+			"BEHAVIOUR: Next point starts at %d microseconds (%d current, %d next time, %d last time, %d timeX, %dtimeoX)\n",
+			(_nextPoint->time * _timeMux) / _timeDiv, (int) _runTime,
+			_nextPoint->time, _lastPoint->time, _timeMux, _timeDiv
 		);
+	Serial.printf("BEHAVIOUR: %d | %d\n", _nextPoint->time, points.get(_i_lastPoint+1)[0]);
 #endif
-	return (_nextPoint[0] * _timeMux) / _timeDiv;
+	return (_nextPoint->time * _timeMux) / _timeDiv;
 }
 
 unsigned long Behaviour::currentPointStartTime(){
-	return (_lastPoint[0] * _timeMux) / _timeDiv;
+	return (_lastPoint->time * _timeMux) / _timeDiv;
 }
 
 bool Behaviour::advancePoint(){
-#if DEBUG_BEHAVIOUR
-	Serial.println("BEHAVIOUR: Advance Called.");
-#endif
 
 	_i_lastPoint += 1;
 
-	return loadPoints();
+	bool success = loadPoints();
+
+#if DEBUG_BEHAVIOUR > 2
+	Serial.printf("BEHAVIOUR: Advance Called. i: %d/%d, success: %d.\n", _i_lastPoint, points.size(), (int)success);
+#endif
+
+	return success;
 }
 
 bool Behaviour::loadPoints(){
-	if( _i_lastPoint < points.size() ){
+	bool success = false;
+	if( _i_lastPoint + 1 < points.size() ){
 		_lastPoint = points.get(_i_lastPoint);
 		_nextPoint = points.get(_i_lastPoint+1);
-		return true;
+		success = true;
 	} else {
 		_i_lastPoint = 0;
 		_lastPoint = points.get(_i_lastPoint);
@@ -174,6 +188,12 @@ bool Behaviour::loadPoints(){
 		} else {
 			_nextPoint = 0;
 		}
-		return false;
+		success = false;
 	}
+
+#if DEBUG_BEHAVIOUR > 1
+	Serial.printf("BEHAVIOUR: Points Loaded : [%d: %d, %d: %d]\n", _lastPoint->time, _lastPoint->value, _nextPoint->time, _nextPoint->value);
+#endif
+
+	return success;
 }

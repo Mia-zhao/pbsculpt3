@@ -10,22 +10,24 @@ void setup()
 	Serial.begin(9600);
 	delay(1000); // Wait for serial to start
 
-	Serial.println("Starting Firmware...");
+	Serial.println("EXAMPLE: Starting Firmware...");
 	// Set up test LED
 
-	Serial.println("Setting LED mode...");
+	Serial.println("EXAMPLE: Setting LED mode...");
 	pinMode(LED_BUILTIN, OUTPUT);
 
-	Serial.println("Beginning SoftPWM...");
+	Serial.println("EXAMPLE: Beginning SoftPWM...");
 	SoftPWMBegin();
 
 	SoftPWMSet(LED_BUILTIN, 0);
 
-	Serial.println("Initializing behaviour...");
+	Serial.println("EXAMPLE: Initializing behaviour...");
 	exponentialBehaviour = Behaviour();
 
+	const int n_timeValue = 18;
+
 	// Timings in microseconds
-	unsigned long timeValue[18][2] = {
+	unsigned long timeValue[n_timeValue][2] = {
 			{0L, 0L},
 			{100000L, 30L},
 			{200000L, 86L},
@@ -45,17 +47,19 @@ void setup()
 			{1600000L, 30L},
 			{1700000L, 0L}
 	};
-	int n_timeValue = 18;
-
+	Point* points[n_timeValue];
 	for( int i = 0; i < n_timeValue; i++ ){
-		exponentialBehaviour.points.add(timeValue[i]);
-
-		Serial.printf("Added point: %d, %d\n",
-				exponentialBehaviour.points.get(exponentialBehaviour.points.size()-1)[0],
-				exponentialBehaviour.points.get(exponentialBehaviour.points.size()-1)[1]);
+		points[i] = new Point();
+		points[i]->time = timeValue[i][0];
+		points[i]->value = timeValue[i][1];
 	}
 
-	Serial.println("Finished boot sequence...");
+
+	for( int i = 0; i < n_timeValue; i++ ){
+		exponentialBehaviour.points.add(points[i]);
+	}
+
+	Serial.println("EXAMPLE: Finished boot sequence...");
 
 	exponentialBehaviour.play();
 }
@@ -63,12 +67,9 @@ void setup()
 // The loop function is called in an endless loop
 void loop()
 {
-
-	Serial.printf("Looping... Value at %d\n", (int)exponentialBehaviour.value());
 	exponentialBehaviour.loop();
 
-	//SoftPWMSet(LED_BUILTIN, exponentialBehaviour.value());
-	digitalWrite(LED_BUILTIN, HIGH);
+	SoftPWMSet(LED_BUILTIN, exponentialBehaviour.value());
 
 	delay(10);
 }
