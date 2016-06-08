@@ -12,6 +12,15 @@
 #define DEVICE_TYPE_HIGH_POWER_LED 5
 #define DEVICE_TYPE_PHOTO_SENSOR 6
 
+enum PeripheralMode {
+	OFF,
+	TEST,
+	SILENT,
+	ACTIVE,
+	BACKGROUND,
+	SLAVE
+};
+
 class Peripheral {
     
     public:
@@ -38,6 +47,8 @@ class Peripheral {
         
         int address();
         
+        PeripheralMode mode;
+
     protected:
         int _address;
         int _type;

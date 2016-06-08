@@ -30,7 +30,6 @@ Behaviour::Behaviour():
 }
 
 Behaviour::~Behaviour() {
-	// TODO Auto-generated destructor stub
 }
 
 void Behaviour::loop(){
@@ -196,4 +195,8 @@ bool Behaviour::loadPoints(){
 #endif
 
 	return success;
+}
+
+bool Behaviour::isPlaying(){
+	return _state == PLAYING;
 }

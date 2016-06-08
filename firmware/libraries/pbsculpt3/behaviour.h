@@ -145,6 +145,12 @@ public:
 	void setValueDivisor(int div);
 	//@}
 
+	/** Queries the state of the behaviour
+	 *
+	 * @return true if the behaviour is currently playing
+	 */
+	bool isPlaying();
+
 	/** LinkedList of Points (time, value) that the behaviour will pass through
 	 *
 	 * 	This LinkedList must be populated (in the order of time) with

@@ -10,6 +10,8 @@
 
 #include "peripheral.h"
 #include <elapsedMillis.h>
+#include "GaussianRandom.h"
+#include "behaviour.h"
 
 class HighPowerLED : public Peripheral {
     
@@ -27,12 +29,41 @@ class HighPowerLED : public Peripheral {
         int value();
         
     protected:
+
         float _value, _fadeInitValue;
         
         // Fade Variables
         int _fadeDuration, _fadeTarget;
         elapsedMillis _fadeTime;
         
+        /** Regulates the background behaviour of the LED
+         *
+         */
+        void backgroundBehaviour();
+        void resetAccumulator();
+
+        long _accumulator;
+
+        /** The rate of accumulation for the accumulator
+         *
+         */
+        int _acc_rate;
+
+        /** The rate of reduction of the accumulator
+         *
+         * Should be less than the accumulation rate to create background
+         * behaviours.
+         *
+         */
+        int _red_rate;
+
+        elapsedMillis inactivityTimer;
+        elapsedMillis _accumulationTimer;
+        long _inactivityThreshold;
+        long _accumulationInterval;
+        GaussianRandom _rand;
+
+        Behaviour _backgroundBehaviour;
 };
 
 #endif
