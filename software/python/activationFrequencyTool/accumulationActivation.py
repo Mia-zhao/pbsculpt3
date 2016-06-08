@@ -8,7 +8,7 @@ This is valid partially as a function of time and the number of checks (because 
 random variable below any value goes up with the number of checks. Thus, it is important that the random variable is
 only regenerated every millisecond for this to be true.
 '''
-
+import math
 import numpy as np
 import matplotlib.mlab as mlab
 import matplotlib.pyplot as plt
@@ -27,7 +27,12 @@ def main(args):
     tipping = []
 
     for i in range(args.reps):
-        randdist = np.random.normal(args.time, args.std, size=(args.plot_time))
+        if args.randmethod == 'normal':
+            randdist = np.random.normal(args.time, args.std, size=(args.plot_time))
+        elif args.randmethod == 'uniform_sq':
+            r1 = np.random.random_integers(0, int(math.sqrt(args.time*2)), size=(args.plot_time))
+            r2 = np.random.random_integers(0, int(math.sqrt(args.time*2)), size=(args.plot_time))
+            randdist = r1*r2
         gt = np.where(acc > randdist)[0][0]
 
         tipping.append(gt)
