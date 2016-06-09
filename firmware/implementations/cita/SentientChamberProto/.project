@@ -33,9 +33,24 @@
 	</natures>
 	<linkedResources>
 		<link>
+			<name>SerialCommand</name>
+			<type>2</type>
+			<location>/home/dkadish/Documents/Arduino/libraries/SerialCommand</location>
+		</link>
+		<link>
+			<name>pbsculpt3</name>
+			<type>2</type>
+			<location>/home/dkadish/workspace/pbsculpt3/firmware/libraries/pbsculpt3</location>
+		</link>
+		<link>
 			<name>core/core</name>
 			<type>2</type>
 			<location>/usr/local/src/arduino-1.6.7/hardware/teensy/avr/cores/teensy3</location>
+		</link>
+		<link>
+			<name>libraries/i2c_t3</name>
+			<type>2</type>
+			<location>/usr/local/src/arduino-1.6.7/hardware/teensy/avr/libraries/i2c_t3</location>
 		</link>
 	</linkedResources>
 </projectDescription>
