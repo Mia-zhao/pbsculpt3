@@ -21,7 +21,7 @@ Node::Node(int serialNumber)
 }
 
 void Node::init(){
-	DBGLN("Initializing Node.");
+	DBGLN("Node", "Initializing Node.");
 
     // Call init for all of the devices
     for(int i=0; i < N_DEVICES; i++){
@@ -56,17 +56,17 @@ void Node::init(){
 		pinMode(I2C_MUL_ADR_pin[i], OUTPUT);
 	}	
 
-	DBGLN("Starting I2C.");
+	DBGLN("Node", "Starting I2C.");
 	//--- I2C initialization ----
 	Wire.begin(I2C_MASTER,0x00, I2C_PINS_18_19, I2C_PULLUP_EXT, I2C_RATE_400);
 
-	DBGLN("Setting PWM Frequency.");
+	DBGLN("Node", "Setting PWM Frequency.");
 	noInterrupts();
 	spwm.begin();
 	spwm.setPWMFreq(1000);  // This is the maximum PWM frequency
 	interrupts();
 
-	DBGLN("Finished Initializing Node.");
+	DBGLN("Node", "Finished Initializing Node.");
 }
 
 void Node::loop(){

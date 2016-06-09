@@ -20,7 +20,7 @@ ProprioceptiveLed::ProprioceptiveLed(char port):
 }
 
 void ProprioceptiveLed::init(){
-	DBGLN("Initializing ProprioceptiveLed.");
+	DBGLN("Node", "Initializing ProprioceptiveLed.");
     HighPowerLED* led = new HighPowerLED(LED_ADDRESS,
     		getPinForAddress(LED_ADDRESS), hasFastPWMForAddress(LED_ADDRESS));
     peripherals.add(led);

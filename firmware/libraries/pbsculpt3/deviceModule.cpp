@@ -95,18 +95,18 @@ bool DeviceModule::hasFastPWMForAddress(int address){
  */
 int DeviceModule::getPinForAddress(int address){
 	if (address >= 5 && address <= 6){
-			DBGLN("Is a sensor...")
+			DBGLN("DM", "Is a sensor...")
 			return _analog[address-5];
 	} else if( hasFastPWM() ){
 		if( hasFastPWMForAddress(address) ){
-			DBGLN("Has FPWM for Addr...")
+			DBGLN("DM", "Has FPWM for Addr...")
 			return _fpwm[address-1];
 		} else {
-			DBGLN("Has FPWM but not for Addr...")
+			DBGLN("DM", "Has FPWM but not for Addr...")
 			return _spwm[address-3];
 		}
 	} else if (address <= 4){
-		DBGLN("Has no FPWM...")
+		DBGLN("DM", "Has no FPWM...")
 		return _spwm[address-1];
 	}
 
