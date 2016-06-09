@@ -32,7 +32,7 @@ void setup()
 	delay(1000);
 #endif
 
-	DBGLN("Testing")
+	DBGLN("DM", "Testing")
 	// Set up node devices
 	node.devices[0] = new ActuatedFrondChainDM(1);
 	node.devices[1] = new EmptyDeviceModule(2);
