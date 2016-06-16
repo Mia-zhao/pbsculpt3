@@ -9,14 +9,17 @@
 
 #include <Arduino.h>
 
-#define MEAN 25000
-#define STD 5000
+#define MEAN 25000L
+#define STD 50000L
 #define INACTIVITY_THRESHOLD 50000L
+#define ACCUMULATION_INTERVAL 1
+#define GAUSSIAN_TEST_INTERVAL 250
 
 HighPowerLED::HighPowerLED(int address, int pin, bool fastPWM) :
 Peripheral(address, 3, pin, fastPWM), _value(0.0), _fadeInitValue(0.0), _fadeDuration(0),
     _fadeTime(0), _fadeTarget(0), _inactivityThreshold(INACTIVITY_THRESHOLD),
-	_accumulationInterval(1), _acc_rate(2), _red_rate(1), _rand(GaussianRandom(MEAN, STD))
+	_accumulationInterval(ACCUMULATION_INTERVAL), _gaussianTestInterval(GAUSSIAN_TEST_INTERVAL),
+	_acc_rate(2), _red_rate(1), _rand(GaussianRandom(MEAN, STD))
 {
     // Set up background behaviour
     const int n_timeValue = 18;
@@ -126,12 +129,15 @@ void HighPowerLED::backgroundBehaviour(){
 		if( _accumulationTimer >= _accumulationInterval && !_backgroundBehaviour.isPlaying()){
 			_accumulationTimer = 0; // Reset timer
 			_accumulator += _acc_rate - _red_rate; // Accumulate and reduce
-			long rnd = _rand.randLong();
-			if( _accumulator > rnd ){
-				if (DEBUG){ Serial.print("HighPowerLED"); Serial.printf(" %d: Starting background behaviour (%d)...\n", __LINE__, rnd); delay(DEBUG_DELAY); }
-				// Create background lighting
-				_backgroundBehaviour.play();
-				_accumulator = 0; // Reset accumulator
+			if( _gaussianTestTimer >= _gaussianTestInterval ){
+				_gaussianTestTimer = 0;
+				long rnd = _rand.randLong();
+				if( _accumulator > rnd ){
+					if (DEBUG){ Serial.print("HighPowerLED"); Serial.printf(" %d: Starting background behaviour (%d)...\n", __LINE__, rnd); delay(DEBUG_DELAY); }
+					// Create background lighting
+					_backgroundBehaviour.play();
+					_accumulator = 0; // Reset accumulator
+				}
 			}
 		}
 

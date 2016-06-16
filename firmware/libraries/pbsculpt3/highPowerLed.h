@@ -60,9 +60,14 @@ class HighPowerLED : public Peripheral {
         int _red_rate;
 
         elapsedMillis inactivityTimer;
-        elapsedMillis _accumulationTimer;
         long _inactivityThreshold;
+
+        elapsedMillis _accumulationTimer;
         long _accumulationInterval;
+
+        elapsedMillis _gaussianTestTimer;
+        long _gaussianTestInterval;
+
         GaussianRandom _rand;
 
         Behaviour _backgroundBehaviour;
