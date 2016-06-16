@@ -29,6 +29,8 @@ class HighPowerLED : public Peripheral {
         int value();
         
     protected:
+        void _setPinToValue();
+        void _switchToBackgroundMode();
 
         float _value, _fadeInitValue;
         

@@ -5,6 +5,7 @@
 
 #include "highPowerLed.h"
 #include "pindefs.h"
+#include "tools.h"
 
 #include <Arduino.h>
 
@@ -60,30 +61,34 @@ void HighPowerLED::init(){
  * @todo Create background behaviour
  */
 void HighPowerLED::loop(){
-    //Serial.println("HighPowerLED Loop");
-    // Adjust the value as we fade towards the next step
-    if( _fadeDuration > _fadeTime ){
-        float slope = ((float)_fadeTarget - _fadeInitValue)/((float)_fadeDuration);
-        _value = _fadeInitValue + slope * (float)_fadeTime;
-        //Serial.printf("FADING: %f, %i, %f, %f, %i, %i\n", _value, _fadeTarget, _fadeInitValue, slope, _fadeDuration, (int)_fadeTime);
-    } else {
-        _value = (float)_fadeTarget;
-    }
+    switch(mode){
+	case ACTIVE:
+		//Serial.println("HighPowerLED Loop");
+		// Adjust the value as we fade towards the next step
+		if( _fadeDuration > _fadeTime ){
+			float slope = ((float)_fadeTarget - _fadeInitValue)/((float)_fadeDuration);
+			_value = _fadeInitValue + slope * (float)_fadeTime;
+			//Serial.printf("FADING: %f, %i, %f, %f, %i, %i\n", _value, _fadeTarget, _fadeInitValue, slope, _fadeDuration, (int)_fadeTime);
+		} else {
+			_value = (float)_fadeTarget;
+		}
 
-    if( _fastPWM ){
-    	analogWrite(_pin, _value);
-    } else {
-    	noInterrupts();
-		spwm.setPWMFast(_pin, 16*_value);
-		interrupts();
-    }
+		// Reset the inactivity timer if there is activity.
+		if( _value > 0 ){
+			inactivityTimer = 0;
+		}
 
-    // Reset the inactivity timer if there is activity.
-    if( _value > 0 ){
-    	inactivityTimer = 0;
+		break;
+	case BACKGROUND:
+		_backgroundBehaviour.loop();
+		_value = _backgroundBehaviour.value();
+
+		break;
     }
 
     backgroundBehaviour();
+
+    _setPinToValue();
 }
 
 int HighPowerLED::fade(int target, int duration){
@@ -111,21 +116,46 @@ void HighPowerLED::backgroundBehaviour(){
 	switch(mode){
 	case ACTIVE:
 		if( inactivityTimer > _inactivityThreshold){
-			mode = BACKGROUND;
-			_accumulator = 0; // Reset accumulator
-			_accumulationTimer = 0; // Reset timer
+			DBGLN("HighPowerLED", "Switching to Background mode...")
+			_switchToBackgroundMode();
 		}
+
+		break;
 	case BACKGROUND:
 		// Check to make sure that enough time has passed AND no background is playing
 		if( _accumulationTimer >= _accumulationInterval && !_backgroundBehaviour.isPlaying()){
 			_accumulationTimer = 0; // Reset timer
 			_accumulator += _acc_rate - _red_rate; // Accumulate and reduce
-			if( _accumulator > _rand.randLong() ){
+			long rnd = _rand.randLong();
+			if( _accumulator > rnd ){
+				if (DEBUG){ Serial.print("HighPowerLED"); Serial.printf(" %d: Starting background behaviour (%d)...\n", __LINE__, rnd); delay(DEBUG_DELAY); }
 				// Create background lighting
 				_backgroundBehaviour.play();
 				_accumulator = 0; // Reset accumulator
 			}
 		}
+
+		break;
+	case TEST:
+	case SILENT:
+	case OFF:
+	case SLAVE:
 		break;
 	}
+}
+
+void HighPowerLED::_setPinToValue(){
+	if( _fastPWM ){
+		analogWrite(_pin, _value);
+	} else {
+		noInterrupts();
+		spwm.setPWMFast(_pin, 16*_value);
+		interrupts();
+	}
+}
+
+void HighPowerLED::_switchToBackgroundMode(){
+	mode = BACKGROUND;
+	_accumulator = 0; // Reset accumulator
+	_accumulationTimer = 0; // Reset timer
 }

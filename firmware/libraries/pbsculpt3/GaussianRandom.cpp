@@ -11,10 +11,13 @@
 
 GaussianRandom::GaussianRandom(long mean, long std):
 	_mean(mean), _std(std), _hasNext(false){
-	randomSeed(analogRead(A0));
+
+	//randomSeed(analogRead(A0));
+
 }
 
 GaussianRandom::~GaussianRandom() {
+
 }
 
 long GaussianRandom::randLong(){
