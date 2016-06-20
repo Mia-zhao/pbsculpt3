@@ -8,6 +8,9 @@
 #ifndef __DEVICE_H
 #define __DEVICE_H
 
+#include <Arduino.h>
+#include "LinkedList.h"
+
 #define DEVICE_TYPE_SMA 1
 #define DEVICE_TYPE_HIGH_POWER_LED 5
 #define DEVICE_TYPE_PHOTO_SENSOR 6
@@ -19,6 +22,18 @@ enum PeripheralMode {
 	ACTIVE,
 	BACKGROUND,
 	SLAVE
+};
+
+enum EventType {
+	BackgroundActivation,
+};
+
+struct PeripheralEvent{
+	EventType type;
+	long time;
+	int peripheralType;
+	int address;
+	int pin;
 };
 
 class Peripheral {
@@ -48,6 +63,10 @@ class Peripheral {
         int address();
         
         PeripheralMode mode;
+
+        LinkedList<PeripheralEvent> events;
+
+        elapsedMillis time;
 
     protected:
         int _address;
