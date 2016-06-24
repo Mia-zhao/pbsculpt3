@@ -31,6 +31,7 @@ class HighPowerLED : public Peripheral {
     protected:
         void _setPinToValue();
         void _switchToBackgroundMode();
+        void _startBackgroundActivation();
 
         float _value, _fadeInitValue;
         
@@ -68,7 +69,8 @@ class HighPowerLED : public Peripheral {
         elapsedMillis _gaussianTestTimer;
         long _gaussianTestInterval;
 
-        GaussianRandom _rand;
+        long _rand;
+        GaussianRandom _randGenerator;
 
         Behaviour _backgroundBehaviour;
 };

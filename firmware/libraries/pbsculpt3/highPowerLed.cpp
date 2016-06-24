@@ -19,7 +19,7 @@ HighPowerLED::HighPowerLED(int address, int pin, bool fastPWM) :
 Peripheral(address, 3, pin, fastPWM), _value(0.0), _fadeInitValue(0.0), _fadeDuration(0),
     _fadeTime(0), _fadeTarget(0), _inactivityThreshold(INACTIVITY_THRESHOLD),
 	_accumulationInterval(ACCUMULATION_INTERVAL), _gaussianTestInterval(GAUSSIAN_TEST_INTERVAL),
-	_acc_rate(2), _red_rate(1), _rand(GaussianRandom(MEAN, STD))
+	_acc_rate(2), _red_rate(1), _rand(0), _randGenerator(GaussianRandom(MEAN, STD))
 {
     // Set up background behaviour
     const int n_timeValue = 18;
@@ -131,14 +131,12 @@ void HighPowerLED::backgroundBehaviour(){
 			_accumulator += _acc_rate - _red_rate; // Accumulate and reduce
 			if( _gaussianTestTimer >= _gaussianTestInterval ){
 				_gaussianTestTimer = 0;
-				long rnd = _rand.randLong();
-				if( _accumulator > rnd ){
-					if (DEBUG){ Serial.print("HighPowerLED"); Serial.printf(" %d: Starting background behaviour (%d)...\n", __LINE__, rnd); delay(DEBUG_DELAY); }
-					// Create background lighting
-					_backgroundBehaviour.play();
-					_accumulator = 0; // Reset accumulator
+				if( _accumulator > _rand ){ // Start the background activation event
+					DBGF("HighPoweredLED", "Starting background behaviour (%d)...",  _rand)
+					_startBackgroundActivation();
 				}
 			}
+
 		}
 
 		break;
@@ -160,8 +158,34 @@ void HighPowerLED::_setPinToValue(){
 	}
 }
 
+/** Switch to background mode. Only called if not in background mode already.
+ *
+ */
 void HighPowerLED::_switchToBackgroundMode(){
-	mode = BACKGROUND;
+	if( mode != BACKGROUND ){
+		mode = BACKGROUND;
+		_accumulator = 0; // Reset accumulator
+		_accumulationTimer = 0; // Reset timer
+		_rand = _randGenerator.randLong();
+
+		PeripheralEvent e = {BackgroundMode,time,_type,_address,_pin};
+		DBGLN("HighPowerLED", "Background event created...")
+
+		events.push(e);
+		DBGLN("HighPowerLED", "Background event pushed...")
+	}
+}
+
+
+void HighPowerLED::_startBackgroundActivation(){
+	// Create background lighting
+	_backgroundBehaviour.play();
 	_accumulator = 0; // Reset accumulator
-	_accumulationTimer = 0; // Reset timer
+
+	// Reset the random number
+	_rand = _randGenerator.randLong();
+
+	// Log the event
+	PeripheralEvent e = {BackgroundActivation,(long)time,_type,_address,_pin};
+	events.push(e);
 }

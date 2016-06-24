@@ -49,6 +49,13 @@ uint8_t xbeeSerialNumber[8] = {0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF};
 uint8_t shCmd[] = {'S','H'};// serial low
 AtCommandRequest atRequest = AtCommandRequest(shCmd);
 AtCommandResponse atResponse = AtCommandResponse();
+
+/*// ZB Messages
+uint8_t payload[] = { 0, 0 };
+
+XBeeAddress64 addr64 = XBeeAddress64(0x0013a200, 0x403e0f30);
+ZBTxRequest zbTx = ZBTxRequest(addr64, payload, sizeof(payload));
+ZBTxStatusResponse txStatus = ZBTxStatusResponse();*/
 #endif
 
 uint8_t dataOut[1000]; // This is of fixed size at the moment but these should probably be dynamic
@@ -141,6 +148,18 @@ void loop() {
 #endif
 
 	doHeartbeat();
+
+#if DEBUG
+	// Send events as messages
+    for( int i=0; i<node.deviceCount(); i++ ){
+    	DeviceModule *dm = node.devices[i];
+    	if(dm->events.size()>0){
+    		PeripheralEvent e = dm->events.pop();
+    		Serial.printf("MAIN: Event %d, Type %d, Time %d, Addr %d-%d\n",
+    				e.type, e.peripheralType, e.time, e.address, e.pin);
+    	}
+    }
+#endif
 
 #if __USE_XBEE__
 	xbee_loop();
@@ -263,6 +282,15 @@ void xbee_loop(){
 				printXBeeSerial();
 			}
         }
+    }
+
+    // Send any events over XBee connection
+    for( int i=0; i<node.deviceCount(); i++ ){
+    	DeviceModule *dm = node.devices[i];
+    	if(dm->events.size()>0){
+    		PeripheralEvent e = dm->events.pop();
+
+    	}
     }
 }
 #endif

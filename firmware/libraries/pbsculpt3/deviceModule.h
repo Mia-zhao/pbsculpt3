@@ -8,8 +8,7 @@
 #ifndef __SUBMODULE_H
 #define __SUBMODULE_H
 
-#include <LinkedList.h>
-
+#include "LimitedQueue.h"
 #include "peripheral.h"
 #include <Arduino.h>
 
@@ -42,6 +41,9 @@ class DeviceModule {
 
         bool hasFastPWMForAddress(int address);
         int getPinForAddress(int address);
+
+        LimitedQueue<PeripheralEvent> events;
+        elapsedMillis time;
 
     protected:
         char _port;

@@ -9,7 +9,7 @@
 #define __DEVICE_H
 
 #include <Arduino.h>
-#include "LinkedList.h"
+#include "LimitedQueue.h"
 
 #define DEVICE_TYPE_SMA 1
 #define DEVICE_TYPE_HIGH_POWER_LED 5
@@ -25,6 +25,7 @@ enum PeripheralMode {
 };
 
 enum EventType {
+	BackgroundMode,
 	BackgroundActivation,
 };
 
@@ -64,7 +65,7 @@ class Peripheral {
         
         PeripheralMode mode;
 
-        LinkedList<PeripheralEvent> events;
+        LimitedQueue<PeripheralEvent> events;
 
         elapsedMillis time;
 

@@ -31,20 +31,19 @@ DeviceModule::DeviceModule(char port):
     peripherals = LinkedList<Peripheral*>();
 }
 
-/*void SubNode::loop(){
-
-    //std::map<int,Device>::iterator iter;
-    
-    for (iter = devices.begin(); iter != devices.end(); iter++) {
-        //Switch to device port
-        iter->second.loop();
-    }
-    
-    int n = devices.size();
-    for(int i=0; i<n; i++){
-        devices[i].loop();
-    }
-}*/
+void DeviceModule::loop(){
+	for(int i=0; i<peripherals.size(); i++){
+		while(peripherals.get(i)->events.size() > 0){
+			PeripheralEvent event = peripherals.get(i)->events.pop();
+			DBGLN("DM", "Pushing event.")
+			switch(event.type){
+			default:
+				events.push(event);
+				break;
+			}
+		}
+	}
+}
 
 bool DeviceModule::fade(int address, int target, int duration){
     return false;
