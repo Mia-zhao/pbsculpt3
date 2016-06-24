@@ -51,7 +51,7 @@ AtCommandRequest atRequest = AtCommandRequest(shCmd);
 AtCommandResponse atResponse = AtCommandResponse();
 
 /*// ZB Messages
-uint8_t payload[] = { 0, 0 };
+uint8_t payload[] = { 0, 0, 0, 0 };
 
 XBeeAddress64 addr64 = XBeeAddress64(0x0013a200, 0x403e0f30);
 ZBTxRequest zbTx = ZBTxRequest(addr64, payload, sizeof(payload));
@@ -149,17 +149,62 @@ void loop() {
 
 	doHeartbeat();
 
-#if DEBUG
 	// Send events as messages
     for( int i=0; i<node.deviceCount(); i++ ){
     	DeviceModule *dm = node.devices[i];
     	if(dm->events.size()>0){
     		PeripheralEvent e = dm->events.pop();
+#if DEBUG
     		Serial.printf("MAIN: Event %d, Type %d, Time %d, Addr %d-%d\n",
     				e.type, e.peripheralType, e.time, e.port, e.address);
+#endif
+#if __USE_XBEE__
+    		uint8_t payload[] = { 0, 0, 0, 0 };
+
+    		payload[0] = (int) e.port;
+    		payload[1] = e.address;
+    		payload[2] = e.type;
+    		payload[3] = e.peripheralType;
+
+    		XBeeAddress64 addr64 = XBeeAddress64(0x0, 0xFFFF);
+    		ZBTxRequest zbTx = ZBTxRequest(addr64, payload, sizeof(payload));
+    		ZBTxStatusResponse txStatus = ZBTxStatusResponse();
+
+    		xbee.send(zbTx);
+
+#if DEBUG
+    		// after sending a tx request, we expect a status response
+    		  // wait up to half second for the status response
+    		  if (xbee.readPacket(1000)) {
+    		    // got a response!
+
+    		    // should be a znet tx status
+    		    if (xbee.getResponse().getApiId() == ZB_TX_STATUS_RESPONSE) {
+    		      xbee.getResponse().getZBTxStatusResponse(txStatus);
+
+    		      // get the delivery status, the fifth byte
+    		      if (txStatus.getDeliveryStatus() == SUCCESS) {
+    		        // success.  time to celebrate
+    		        DBGLN("MAIN-XB", "Broadcast Successful.")
+    		      } else {
+    		        // the remote XBee did not receive our packet. is it powered on?
+    		        DBGLN("MAIN-XB", "Broadcast Error. XB did not receive our package.")
+    		      }
+    		    }
+    		  } else if (xbee.getResponse().isError()) {
+    		    //nss.print("Error reading packet.  Error code: ");
+    		    //nss.println(xbee.getResponse().getErrorCode());
+  		        DBGF("MAIN-XB", "Error reading packet.  Error code: %d", xbee.getResponse().getErrorCode())
+    		  } else {
+    		    // local XBee did not provide a timely TX Status Response -- should not happen
+  		        DBGLN("MAIN-XB", "Error. local XBee did not provide a timely TX Status Response")
+    		  }
+
+#endif
+
+#endif
     	}
     }
-#endif
 
 #if __USE_XBEE__
 	xbee_loop();

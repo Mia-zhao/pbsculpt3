@@ -9,7 +9,7 @@
 
 #include <Arduino.h>
 
-#define __TESTING__ 1
+#define __TESTING__ 0
 
 #if __TESTING__
 #define MEAN 2500L
