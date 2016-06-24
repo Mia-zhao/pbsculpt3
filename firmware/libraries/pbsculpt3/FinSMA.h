@@ -17,7 +17,7 @@
 
 class FinSMA: public Peripheral {
 public:
-	FinSMA(int address, int pin, bool fastPWM);
+	FinSMA(int address, char port, int pin, bool fastPWM);
 
 	void init();
 	void loop();

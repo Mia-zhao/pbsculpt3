@@ -10,8 +10,8 @@
 #include <FinSMA.h>
 #include "pindefs.h"
 
-FinSMA::FinSMA(int address, int pin, bool fastPWM) :
-Peripheral(address, 3, pin, fastPWM), _value(0.0), _fadeInitValue(0.0), _fadeDuration(0),
+FinSMA::FinSMA(int address, char port, int pin, bool fastPWM) :
+Peripheral(address, 3, port, pin, fastPWM), _value(0.0), _fadeInitValue(0.0), _fadeDuration(0),
     _fadeTime(0), _onTime(0), _offTime(0), _fadeTarget(0), _max_sma_on_time(__MAX_SMA_ON_TIME),
 	_min_sma_off_time(__MIN_SMA_OFF_TIME), _max_sma_level(__MAX_SMA_LEVEL), _lockout(false)
 {

@@ -19,11 +19,11 @@ FinReflexDM::FinReflexDM(char port):
 }
 
 void FinReflexDM::init(){
-    FinSMA* rightSMA = new FinSMA(__RIGHT_SMA_ADDRESS,
+    FinSMA* rightSMA = new FinSMA(__RIGHT_SMA_ADDRESS, _port,
     		getPinForAddress(__RIGHT_SMA_ADDRESS), hasFastPWMForAddress(__RIGHT_SMA_ADDRESS));
     peripherals.add(rightSMA);
 
-    FinSMA* leftSMA = new FinSMA(__LEFT_SMA_ADDRESS,
+    FinSMA* leftSMA = new FinSMA(__LEFT_SMA_ADDRESS, _port,
     		getPinForAddress(__LEFT_SMA_ADDRESS), hasFastPWMForAddress(__LEFT_SMA_ADDRESS));
     peripherals.add(leftSMA);
 }

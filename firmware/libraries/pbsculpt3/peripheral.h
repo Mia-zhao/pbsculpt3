@@ -33,8 +33,8 @@ struct PeripheralEvent{
 	EventType type;
 	long time;
 	int peripheralType;
+	char port;
 	int address;
-	int pin;
 };
 
 class Peripheral {
@@ -52,7 +52,7 @@ class Peripheral {
          *
          * @todo Break some of this out into Sensor/Actuator as a subclass of peripheral?
          */
-		Peripheral(int address, int type, int pin, bool fastPWM);
+		Peripheral(int address, int type, char port, int pin, bool fastPWM);
         
         virtual void init() = 0;
         virtual void loop();
@@ -70,6 +70,7 @@ class Peripheral {
         elapsedMillis time;
 
     protected:
+        char _port;
         int _address;
         int _type;
         int _pin;

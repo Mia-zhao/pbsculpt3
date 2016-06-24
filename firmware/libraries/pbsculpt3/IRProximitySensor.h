@@ -12,7 +12,7 @@
 
 class IRProximitySensor: public Peripheral {
 public:
-	IRProximitySensor(int address, int pin, bool fastPWM);
+	IRProximitySensor(int address, char port, int pin, bool fastPWM);
 	virtual ~IRProximitySensor();
 
 	void init();

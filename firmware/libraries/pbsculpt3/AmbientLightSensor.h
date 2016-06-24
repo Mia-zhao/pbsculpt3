@@ -12,7 +12,7 @@
 
 class AmbientLightSensor: public Peripheral {
 	public:
-		AmbientLightSensor(int address, int pin, bool fastPWM);
+		AmbientLightSensor(int address, char port, int pin, bool fastPWM);
 
 		void init();
 		void loop();

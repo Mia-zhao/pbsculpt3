@@ -21,11 +21,11 @@ ProprioceptiveLed::ProprioceptiveLed(char port):
 
 void ProprioceptiveLed::init(){
 	DBGLN("Node", "Initializing ProprioceptiveLed.");
-    HighPowerLED* led = new HighPowerLED(LED_ADDRESS,
+    HighPowerLED* led = new HighPowerLED(LED_ADDRESS, _port,
     		getPinForAddress(LED_ADDRESS), hasFastPWMForAddress(LED_ADDRESS));
     peripherals.add(led);
 
-    AmbientLightSensor* ambientLight = new AmbientLightSensor(PHOTO_ADDRESS,
+    AmbientLightSensor* ambientLight = new AmbientLightSensor(PHOTO_ADDRESS, _port,
     		getPinForAddress(PHOTO_ADDRESS), hasFastPWMForAddress(PHOTO_ADDRESS));
     peripherals.add(ambientLight);
 }
@@ -39,6 +39,7 @@ void ProprioceptiveLed::loop(){
         Serial.printf("Done looping propLed: device %i...\n", i);
     }*/
     //Serial.printf("Looping propLed for %i devices...\n", devices.size());
+	DeviceModule::loop();
     
     for (int i=0; i<peripherals.size(); i++) {
         //Serial.printf("Looping propLed: device %i...\n", i);

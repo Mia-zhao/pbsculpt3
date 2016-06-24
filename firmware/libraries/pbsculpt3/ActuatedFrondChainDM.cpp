@@ -21,12 +21,12 @@ ActuatedFrondChainDM::~ActuatedFrondChainDM() {
 void ActuatedFrondChainDM::init(){
 	// Instantiate 1-indexed LEDs
 	for( int i = 0; i < _N_LEDS; i++ ){
-		HighPowerLED *led = new HighPowerLED(i+1, getPinForAddress(i+1), hasFastPWMForAddress(i+1));
+		HighPowerLED *led = new HighPowerLED(i+1, _port, getPinForAddress(i+1), hasFastPWMForAddress(i+1));
 		peripherals.add(led);
 	}
 
 	// Instantiate the proximity sensors
-	IRProximitySensor *prox = new IRProximitySensor(4, getPinForAddress(4), false);
+	IRProximitySensor *prox = new IRProximitySensor(4, _port, getPinForAddress(4), false);
 	peripherals.add(prox);
 }
 

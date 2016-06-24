@@ -9,14 +9,22 @@
 
 #include <Arduino.h>
 
+#define __TESTING__ 1
+
+#if __TESTING__
+#define MEAN 2500L
+#define STD 5000L
+#define INACTIVITY_THRESHOLD 5000L
+#else
 #define MEAN 25000L
 #define STD 50000L
 #define INACTIVITY_THRESHOLD 50000L
+#endif
 #define ACCUMULATION_INTERVAL 1
 #define GAUSSIAN_TEST_INTERVAL 250
 
-HighPowerLED::HighPowerLED(int address, int pin, bool fastPWM) :
-Peripheral(address, 3, pin, fastPWM), _value(0.0), _fadeInitValue(0.0), _fadeDuration(0),
+HighPowerLED::HighPowerLED(int address, char  port, int pin, bool fastPWM) :
+Peripheral(address, 3, port, pin, fastPWM), _value(0.0), _fadeInitValue(0.0), _fadeDuration(0),
     _fadeTime(0), _fadeTarget(0), _inactivityThreshold(INACTIVITY_THRESHOLD),
 	_accumulationInterval(ACCUMULATION_INTERVAL), _gaussianTestInterval(GAUSSIAN_TEST_INTERVAL),
 	_acc_rate(2), _red_rate(1), _rand(0), _randGenerator(GaussianRandom(MEAN, STD))
@@ -168,7 +176,7 @@ void HighPowerLED::_switchToBackgroundMode(){
 		_accumulationTimer = 0; // Reset timer
 		_rand = _randGenerator.randLong();
 
-		PeripheralEvent e = {BackgroundMode,time,_type,_address,_pin};
+		PeripheralEvent e = {BackgroundMode,time,_type,_port,_address};
 		DBGLN("HighPowerLED", "Background event created...")
 
 		events.push(e);
@@ -186,6 +194,6 @@ void HighPowerLED::_startBackgroundActivation(){
 	_rand = _randGenerator.randLong();
 
 	// Log the event
-	PeripheralEvent e = {BackgroundActivation,(long)time,_type,_address,_pin};
+	PeripheralEvent e = {BackgroundActivation,(long)time,_type,_port,_address};
 	events.push(e);
 }

@@ -156,7 +156,7 @@ void loop() {
     	if(dm->events.size()>0){
     		PeripheralEvent e = dm->events.pop();
     		Serial.printf("MAIN: Event %d, Type %d, Time %d, Addr %d-%d\n",
-    				e.type, e.peripheralType, e.time, e.address, e.pin);
+    				e.type, e.peripheralType, e.time, e.port, e.address);
     	}
     }
 #endif

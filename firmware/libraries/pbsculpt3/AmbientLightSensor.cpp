@@ -9,8 +9,8 @@
 
 #include <Arduino.h>
 
-AmbientLightSensor::AmbientLightSensor(int address, int pin, bool fastPWM) :
-	Peripheral(address, DEVICE_TYPE_PHOTO_SENSOR, pin, fastPWM){
+AmbientLightSensor::AmbientLightSensor(int address, char port, int pin, bool fastPWM) :
+	Peripheral(address, DEVICE_TYPE_PHOTO_SENSOR, port, pin, fastPWM){
 
 }
 

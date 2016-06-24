@@ -9,8 +9,8 @@
 
 #define MAX_EVENTS 10
 
-Peripheral::Peripheral(int address, int type, int pin, bool fastPWM):
-    _address(address), _type(type), _pin(pin), _fastPWM(fastPWM),
+Peripheral::Peripheral(int address, int type, char port, int pin, bool fastPWM):
+    _address(address), _type(type), _port(port), _pin(pin), _fastPWM(fastPWM),
 	mode(ACTIVE), time(0)
 {
 	events = LimitedQueue<PeripheralEvent>(MAX_EVENTS);

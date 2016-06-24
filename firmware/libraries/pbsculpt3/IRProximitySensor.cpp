@@ -9,8 +9,8 @@
 
 #include <Arduino.h>
 
-IRProximitySensor::IRProximitySensor(int address, int pin, bool fastPWM) :
-Peripheral(address, DEVICE_TYPE_PHOTO_SENSOR, pin, fastPWM){
+IRProximitySensor::IRProximitySensor(int address, char port, int pin, bool fastPWM) :
+Peripheral(address, DEVICE_TYPE_PHOTO_SENSOR, port, pin, fastPWM){
 
 }
 
