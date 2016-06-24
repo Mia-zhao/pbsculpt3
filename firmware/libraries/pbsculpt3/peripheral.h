@@ -69,6 +69,9 @@ class Peripheral {
 
         elapsedMillis time;
 
+        virtual void handleLocalNeighbourBackgroundActivation();
+        virtual void handleNeighbourBackgroundActivation();
+
     protected:
         char _port;
         int _address;

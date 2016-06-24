@@ -16,17 +16,19 @@
 #define STD 5000L
 #define INACTIVITY_THRESHOLD 5000L
 #else
-#define MEAN 25000L
-#define STD 50000L
+#define MEAN 15000L
+#define STD 30000L
 #define INACTIVITY_THRESHOLD 50000L
 #endif
 #define ACCUMULATION_INTERVAL 1
-#define GAUSSIAN_TEST_INTERVAL 250
+
+#define LOCAL_BG_ACTIVITY_INHIBITION_FACTOR 2
+#define COMMUNAL_BG_ACTIVITY_INHIBITION_FACTOR 10
 
 HighPowerLED::HighPowerLED(int address, char  port, int pin, bool fastPWM) :
 Peripheral(address, 3, port, pin, fastPWM), _value(0.0), _fadeInitValue(0.0), _fadeDuration(0),
     _fadeTime(0), _fadeTarget(0), _inactivityThreshold(INACTIVITY_THRESHOLD),
-	_accumulationInterval(ACCUMULATION_INTERVAL), _gaussianTestInterval(GAUSSIAN_TEST_INTERVAL),
+	_accumulationInterval(ACCUMULATION_INTERVAL),
 	_acc_rate(2), _red_rate(1), _rand(0), _randGenerator(GaussianRandom(MEAN, STD))
 {
     // Set up background behaviour
@@ -137,14 +139,10 @@ void HighPowerLED::backgroundBehaviour(){
 		if( _accumulationTimer >= _accumulationInterval && !_backgroundBehaviour.isPlaying()){
 			_accumulationTimer = 0; // Reset timer
 			_accumulator += _acc_rate - _red_rate; // Accumulate and reduce
-			if( _gaussianTestTimer >= _gaussianTestInterval ){
-				_gaussianTestTimer = 0;
-				if( _accumulator > _rand ){ // Start the background activation event
-					DBGF("HighPoweredLED", "Starting background behaviour (%d)...",  _rand)
-					_startBackgroundActivation();
-				}
+			if( _accumulator > _rand ){ // Start the background activation event
+				DBGF("HighPoweredLED", "Starting background behaviour (%d)...",  _rand)
+				_startBackgroundActivation();
 			}
-
 		}
 
 		break;
@@ -184,7 +182,6 @@ void HighPowerLED::_switchToBackgroundMode(){
 	}
 }
 
-
 void HighPowerLED::_startBackgroundActivation(){
 	// Create background lighting
 	_backgroundBehaviour.play();
@@ -196,4 +193,32 @@ void HighPowerLED::_startBackgroundActivation(){
 	// Log the event
 	PeripheralEvent e = {BackgroundActivation,(long)time,_type,_port,_address};
 	events.push(e);
+}
+
+void HighPowerLED::handleLocalNeighbourBackgroundActivation(){
+	switch (mode) {
+		case BACKGROUND:
+			//if(!_backgroundBehaviour.isPlaying()){
+				DBGF("HighPoweredLED", "Local Bg Activation (%d-%d): Reducing accumulator from %d to %d",
+						_port,_address,_accumulator, _accumulator-_accumulator / LOCAL_BG_ACTIVITY_INHIBITION_FACTOR)
+				// Increase the time to activation if a local neighbour goes off
+				_accumulator -= _accumulator / LOCAL_BG_ACTIVITY_INHIBITION_FACTOR;
+			//}
+			break;
+		default:
+			break;
+	}
+}
+
+void HighPowerLED::handleNeighbourBackgroundActivation(){
+	switch (mode) {
+		case BACKGROUND:
+			DBGF("HighPoweredLED", "Bg Activation: Reducing accumulator from %d to %d",
+					_accumulator, _accumulator-_accumulator / COMMUNAL_BG_ACTIVITY_INHIBITION_FACTOR)
+			// Increase the time to activation if any neighbour goes off
+			_accumulator -= _accumulator / COMMUNAL_BG_ACTIVITY_INHIBITION_FACTOR;
+			break;
+		default:
+			break;
+	}
 }

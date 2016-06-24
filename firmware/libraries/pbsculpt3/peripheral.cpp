@@ -23,3 +23,6 @@ void Peripheral::loop(){
 int Peripheral::address(){
     return _address;
 }
+
+void Peripheral::handleLocalNeighbourBackgroundActivation(){}
+void Peripheral::handleNeighbourBackgroundActivation(){}

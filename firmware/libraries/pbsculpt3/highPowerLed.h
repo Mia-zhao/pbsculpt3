@@ -27,6 +27,10 @@ class HighPowerLED : public Peripheral {
         int read(int preprocessType);
         
         int value();
+
+        // Event handling system
+        void handleLocalNeighbourBackgroundActivation();
+        void handleNeighbourBackgroundActivation();
         
     protected:
         void _setPinToValue();
@@ -65,9 +69,6 @@ class HighPowerLED : public Peripheral {
 
         elapsedMillis _accumulationTimer;
         long _accumulationInterval;
-
-        elapsedMillis _gaussianTestTimer;
-        long _gaussianTestInterval;
 
         long _rand;
         GaussianRandom _randGenerator;

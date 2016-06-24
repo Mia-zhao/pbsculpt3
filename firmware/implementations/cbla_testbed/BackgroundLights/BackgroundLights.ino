@@ -154,6 +154,13 @@ void loop() {
     	DeviceModule *dm = node.devices[i];
     	if(dm->events.size()>0){
     		PeripheralEvent e = dm->events.pop();
+
+    		// Make sure other DMs see the event.
+    		for( int j=0; j<node.deviceCount(); j++ ){
+    			if( i!=j ){ // Don't send the event back to the sender
+    				node.devices[j]->handleLocalNeighbourEvent(e);
+    			}
+    		}
 #if DEBUG
     		Serial.printf("MAIN: Event %d, Type %d, Time %d, Addr %d-%d\n",
     				e.type, e.peripheralType, e.time, e.port, e.address);

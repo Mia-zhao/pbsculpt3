@@ -45,10 +45,17 @@ class DeviceModule {
         LimitedQueue<PeripheralEvent> events;
         elapsedMillis time;
 
+        void handleLocalNeighbourEvent(PeripheralEvent e);
+        void handleNeighbourEvent(PeripheralEvent e);
+
     protected:
         char _port;
         LinkedList<Peripheral*> peripherals;
         const uint8_t * _fpwm, * _spwm, * _analog;
+
+        virtual void handleLocalNeighbourBackgroundActivation();
+        virtual void handleNeighbourBackgroundActivation();
+
 };
 
 #endif

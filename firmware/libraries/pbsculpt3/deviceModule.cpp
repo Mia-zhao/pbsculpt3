@@ -111,3 +111,36 @@ int DeviceModule::getPinForAddress(int address){
 
 	return -1; // Is this right? Something's wrong.
 }
+
+void DeviceModule::handleLocalNeighbourEvent(PeripheralEvent e){
+	switch (e.type) {
+		case BackgroundActivation:
+			handleLocalNeighbourBackgroundActivation();
+			break;
+		default:
+			break;
+	}
+}
+
+void DeviceModule::handleNeighbourEvent(PeripheralEvent e){
+	switch (e.type) {
+		case BackgroundActivation:
+			handleNeighbourBackgroundActivation();
+			break;
+		default:
+			break;
+	}
+}
+
+
+void DeviceModule::handleLocalNeighbourBackgroundActivation(){
+	for( int i=0; i<peripherals.size(); i++ ){
+		peripherals.get(i)->handleLocalNeighbourBackgroundActivation();
+	}
+}
+
+void DeviceModule::handleNeighbourBackgroundActivation(){
+	for( int i=0; i<peripherals.size(); i++ ){
+		peripherals.get(i)->handleNeighbourBackgroundActivation();
+	}
+}
