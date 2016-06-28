@@ -23,7 +23,7 @@
 #define ACCUMULATION_INTERVAL 1
 
 #define LOCAL_BG_ACTIVITY_INHIBITION_FACTOR 2
-#define COMMUNAL_BG_ACTIVITY_INHIBITION_FACTOR 10
+#define COMMUNAL_BG_ACTIVITY_INHIBITION_FACTOR 20
 
 HighPowerLED::HighPowerLED(int address, char  port, int pin, bool fastPWM) :
 Peripheral(address, 3, port, pin, fastPWM), _value(0.0), _fadeInitValue(0.0), _fadeDuration(0),

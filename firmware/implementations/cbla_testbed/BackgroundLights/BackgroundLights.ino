@@ -50,17 +50,19 @@ uint8_t shCmd[] = {'S','H'};// serial low
 AtCommandRequest atRequest = AtCommandRequest(shCmd);
 AtCommandResponse atResponse = AtCommandResponse();
 
-/*// ZB Messages
-uint8_t payload[] = { 0, 0, 0, 0 };
+// ZB Messages
+//uint8_t payload[] = { 0, 0, 0, 0 };
 
-XBeeAddress64 addr64 = XBeeAddress64(0x0013a200, 0x403e0f30);
-ZBTxRequest zbTx = ZBTxRequest(addr64, payload, sizeof(payload));
-ZBTxStatusResponse txStatus = ZBTxStatusResponse();*/
+//XBeeAddress64 addr64 = XBeeAddress64(0x0013A200, 0x40E99CC7);
+XBeeAddress64 addr64 = XBeeAddress64(0x0, 0xFFFF);
+//ZBTxRequest zbTx = ZBTxRequest(addr64, payload, sizeof(payload));
+ZBTxStatusResponse txStatus = ZBTxStatusResponse();
 #endif
 
 uint8_t dataOut[1000]; // This is of fixed size at the moment but these should probably be dynamic
 
 uint8_t getNumPeripherals();
+void xbee_loop_event(PeripheralEvent e);
 
 void setup() {
 
@@ -147,13 +149,19 @@ void loop() {
 	serialCommLoop();
 #endif
 
+#if __USE_XBEE__
+	xbee_loop();
+#endif
+
 	doHeartbeat();
 
 	// Send events as messages
     for( int i=0; i<node.deviceCount(); i++ ){
     	DeviceModule *dm = node.devices[i];
     	if(dm->events.size()>0){
-    		PeripheralEvent e = dm->events.pop();
+    		DBGF("MAIN-EVT", "Found an event from DM on port %d", i+1);
+
+    		PeripheralEvent e = dm->events.shift();
 
     		// Make sure other DMs see the event.
     		for( int j=0; j<node.deviceCount(); j++ ){
@@ -166,56 +174,10 @@ void loop() {
     				e.type, e.peripheralType, e.time, e.port, e.address);
 #endif
 #if __USE_XBEE__
-    		uint8_t payload[] = { 0, 0, 0, 0 };
-
-    		payload[0] = (int) e.port;
-    		payload[1] = e.address;
-    		payload[2] = e.type;
-    		payload[3] = e.peripheralType;
-
-    		XBeeAddress64 addr64 = XBeeAddress64(0x0, 0xFFFF);
-    		ZBTxRequest zbTx = ZBTxRequest(addr64, payload, sizeof(payload));
-    		ZBTxStatusResponse txStatus = ZBTxStatusResponse();
-
-    		xbee.send(zbTx);
-
-#if DEBUG
-    		// after sending a tx request, we expect a status response
-    		  // wait up to half second for the status response
-    		  if (xbee.readPacket(1000)) {
-    		    // got a response!
-
-    		    // should be a znet tx status
-    		    if (xbee.getResponse().getApiId() == ZB_TX_STATUS_RESPONSE) {
-    		      xbee.getResponse().getZBTxStatusResponse(txStatus);
-
-    		      // get the delivery status, the fifth byte
-    		      if (txStatus.getDeliveryStatus() == SUCCESS) {
-    		        // success.  time to celebrate
-    		        DBGLN("MAIN-XB", "Broadcast Successful.")
-    		      } else {
-    		        // the remote XBee did not receive our packet. is it powered on?
-    		        DBGLN("MAIN-XB", "Broadcast Error. XB did not receive our package.")
-    		      }
-    		    }
-    		  } else if (xbee.getResponse().isError()) {
-    		    //nss.print("Error reading packet.  Error code: ");
-    		    //nss.println(xbee.getResponse().getErrorCode());
-  		        DBGF("MAIN-XB", "Error reading packet.  Error code: %d", xbee.getResponse().getErrorCode())
-    		  } else {
-    		    // local XBee did not provide a timely TX Status Response -- should not happen
-  		        DBGLN("MAIN-XB", "Error. local XBee did not provide a timely TX Status Response")
-    		  }
-
-#endif
-
+    		xbee_loop_event(e);
 #endif
     	}
     }
-
-#if __USE_XBEE__
-	xbee_loop();
-#endif
 
 	delay(1);
 }
@@ -317,36 +279,87 @@ void sendAtCommand() {
   }
 }
 
+
+void handleXBeeEvent(uint8_t * data){
+	//					  type,  time, ptype,  port,  address
+	PeripheralEvent e = { (EventType)data[1], 0, data[2], data[3], data[4] };
+
+	for( int i=0; i<node.deviceCount(); i++ ){
+	    	DeviceModule *dm = node.devices[i];
+	    	dm->handleNeighbourEvent(e);
+	    }
+}
+
 void xbee_loop(){
-    xbee.readPacket();
+
+	xbee.readPacket();
 
     if (xbee.getResponse().isAvailable()) {
-        if (xbee.getResponse().getApiId() == ZB_RX_RESPONSE) {
-            xbee.getResponse().getZBRxResponse(rx);
+    	if (xbee.getResponse().getApiId() == ZB_RX_RESPONSE) {
+    		xbee.getResponse().getZBRxResponse(rx);
 
             uint8_t * data = rx.getData();
 
-            if(data[0] == 0x00){
+            DBGF("MAIN-XB", "Got an XBee Message: %d", data[0]);
+
+            if(data[0] == XBeeMessageType::Ping){
             	Serial.println("Ping...");
-            } else if (data[0] == 0x01) {
-            	Serial.println("Got one...");
+            } else if (data[0] == XBeeMessageType::Event) {
+            	handleXBeeEvent(data);
             } else if (data[0] == 0x02) {
 				printXBeeSerial();
 			}
-        }
-    }
+        } else if (xbee.getResponse().getApiId() == ZB_TX_STATUS_RESPONSE) {
 
-    // Send any events over XBee connection
-    for( int i=0; i<node.deviceCount(); i++ ){
-    	DeviceModule *dm = node.devices[i];
-    	if(dm->events.size()>0){
-    		PeripheralEvent e = dm->events.pop();
+		      xbee.getResponse().getZBTxStatusResponse(txStatus);
 
-    	}
-    }
+		      // get the delivery status, the fifth byte
+		      if (txStatus.getDeliveryStatus() == SUCCESS) {
+		        // success.  time to celebrate
+		        DBGLN("MAIN-XB", "Broadcast Successful.")
+		      } else {
+		        // the remote XBee did not receive our packet. is it powered on?
+		        DBGLN("MAIN-XB", "Broadcast Error. XB did not receive our package.")
+		      }
+		    }
+    } else if (xbee.getResponse().isError()) {
+	    //nss.print("Error reading packet.  Error code: ");
+	    //nss.println(xbee.getResponse().getErrorCode());
+	        DBGF("MAIN-XB", "Error reading packet.  Error code: %d", xbee.getResponse().getErrorCode())
+	}/* else {
+	    // local XBee did not provide a timely TX Status Response -- should not happen
+	        DBGLN("MAIN-XB", "Error. local XBee did not provide a timely TX Status Response")
+	  }*/
+}
+
+void xbee_loop_event(PeripheralEvent e){
+	uint8_t payload[] = { 0, 0, 0, 0, 0 };
+
+	payload[0] = XBeeMessageType::Event;
+	payload[1] = e.type;
+	payload[2] = e.peripheralType;
+	payload[3] = (int) e.port;
+	payload[4] = e.address;
+
+	//XBeeAddress64 addr64 = XBeeAddress64(0x0, 0xFFFF);
+	ZBTxRequest zbTx = ZBTxRequest(addr64, payload, sizeof(payload));
+	//zbTx.setAddress16(0x0000);//FFFE);
+	//zbTx.setOption(ZB_TX_BROADCAST);
+
+	DBGF("MAIN-XB", "Sending payload: %d %d %d %d %d", payload[0], payload[1], payload[2], payload[3], payload[4]);
+
+	xbee.send(zbTx);
+
+	DBGF("MAIN-XB", "Payload Sent to %X %X 0x%X %d %d %d | %d %d",
+			zbTx.getAddress64().getMsb(), zbTx.getAddress64().getLsb(),
+			zbTx.getAddress16(),
+			zbTx.getBroadcastRadius(), zbTx.getOption(), zbTx.getPayloadLength(),
+			zbTx.getFrameId(), zbTx.getApiId()
+	);
 }
 #endif
 
+//FOR SOME REASON, MESSAGES WILL NOT SEND FROM THE XBEE.
 
 void doHeartbeat() {
 	if (heartbeatTimer > 250) {

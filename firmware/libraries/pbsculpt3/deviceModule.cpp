@@ -35,9 +35,9 @@ void DeviceModule::loop(){
 	for(int i=0; i<peripherals.size(); i++){
 		while(peripherals.get(i)->events.size() > 0){
 			PeripheralEvent event = peripherals.get(i)->events.shift();
-			DBGLN("DM", "Pushing event.")
 			switch(event.type){
 			default:
+				DBGLN("DM", "Pushing event.")
 				events.push(event);
 				break;
 			}

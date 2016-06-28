@@ -26,4 +26,10 @@
 
 #endif
 
+enum XBeeMessageType {
+	Ping,
+	Event,
+	Status
+};
+
 #endif /* TOOLS_H_ */
