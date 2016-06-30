@@ -22,7 +22,7 @@
 
 #define DBG(msg)
 #define DBGLN(pre,msg)
-#define DBGF(pre,msg)
+#define DBGF(pre,msg, args...)
 
 #endif
 

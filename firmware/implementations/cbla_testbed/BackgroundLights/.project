@@ -47,6 +47,11 @@
 			<location>/usr/local/src/arduino-1.6.7/hardware/teensy/avr/cores/teensy3</location>
 		</link>
 		<link>
+			<name>libraries/Metro</name>
+			<type>2</type>
+			<location>/usr/local/src/arduino-1.6.7/hardware/teensy/avr/libraries/Metro</location>
+		</link>
+		<link>
 			<name>libraries/XBee</name>
 			<type>2</type>
 			<location>/usr/local/src/arduino-1.6.7/hardware/teensy/avr/libraries/XBee</location>

@@ -27,6 +27,7 @@ enum PeripheralMode {
 enum EventType {
 	BackgroundMode,
 	BackgroundActivation,
+	Activation,
 };
 
 struct PeripheralEvent{

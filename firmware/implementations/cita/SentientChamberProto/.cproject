@@ -75,6 +75,7 @@
 									<listOptionValue builtIn="false" value="/home/dkadish/Arduino/libraries/LinkedList"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/SentientChamberProtoCricketNode/libraries/i2c_t3}&quot;"/>
 									<listOptionValue builtIn="false" value="/home/dkadish/Documents/Arduino/libraries/SerialCommand"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/SentientChamberProtoCricketNode/libraries/Metro}&quot;"/>
 								</option>
 								<inputType id="it.baeyens.arduino.compiler.cpp.sketch.input.1060871083" name="CPP source files" superClass="it.baeyens.arduino.compiler.cpp.sketch.input"/>
 							</tool>
@@ -83,6 +84,7 @@
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/SentientChamberProtoCricketNode/core/core}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/pbsculpt3}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/SentientChamberProtoCricketNode/libraries/i2c_t3}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/SentientChamberProtoCricketNode/libraries/Metro}&quot;"/>
 								</option>
 								<inputType id="it.baeyens.arduino.compiler.c.sketch.input.442362619" name="C Source Files" superClass="it.baeyens.arduino.compiler.c.sketch.input"/>
 							</tool>

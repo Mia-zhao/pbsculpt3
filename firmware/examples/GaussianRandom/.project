@@ -48,6 +48,11 @@
 			<location>/usr/local/src/arduino-1.6.7/hardware/teensy/avr/variants/leonardo</location>
 		</link>
 		<link>
+			<name>libraries/Metro</name>
+			<type>2</type>
+			<location>/usr/local/src/arduino-1.6.7/hardware/teensy/avr/libraries/Metro</location>
+		</link>
+		<link>
 			<name>libraries/SoftPWM</name>
 			<type>2</type>
 			<location>/usr/local/src/arduino-1.6.7/hardware/teensy/avr/libraries/SoftPWM</location>
