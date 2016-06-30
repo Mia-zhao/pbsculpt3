@@ -30,6 +30,7 @@
 									<listOptionValue builtIn="false" value="/usr/local/src/arduino-1.6.7/hardware/teensy/avr/cores/teensy3"/>
 									<listOptionValue builtIn="false" value="/usr/local/src/arduino-1.6.7/hardware/tools/arm/arm-none-eabi/include"/>
 									<listOptionValue builtIn="false" value="/home/dkadish/workspace/pbsculpt3/firmware/libraries/pbsculpt3/"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/pbsculpt3/libraries/Metro}&quot;"/>
 								</option>
 								<inputType id="it.baeyens.arduino.compiler.cpp.sketch.input.778355932" name="CPP source files" superClass="it.baeyens.arduino.compiler.cpp.sketch.input"/>
 							</tool>
@@ -42,6 +43,7 @@
 									<listOptionValue builtIn="false" value="/usr/local/src/arduino-1.6.7/hardware/teensy/avr/cores/teensy3"/>
 									<listOptionValue builtIn="false" value="/usr/local/src/arduino-1.6.7/hardware/tools/arm/arm-none-eabi/include"/>
 									<listOptionValue builtIn="false" value="/home/dkadish/workspace/pbsculpt3/firmware/libraries/pbsculpt3"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/pbsculpt3/libraries/Metro}&quot;"/>
 								</option>
 								<inputType id="it.baeyens.arduino.compiler.c.sketch.input.1276722994" name="C Source Files" superClass="it.baeyens.arduino.compiler.c.sketch.input"/>
 							</tool>
@@ -85,10 +87,14 @@
 									<listOptionValue builtIn="false" value="/usr/local/src/arduino-1.6.7/hardware/teensy/avr/libraries"/>
 									<listOptionValue builtIn="false" value="/usr/local/src/arduino-1.6.7/hardware/teensy/avr/cores/teensy3"/>
 									<listOptionValue builtIn="false" value="/usr/local/src/arduino-1.6.7/hardware/tools/arm/arm-none-eabi/include"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/pbsculpt3/libraries/Metro}&quot;"/>
 								</option>
 								<inputType id="it.baeyens.arduino.compiler.cpp.sketch.input.891654384" name="CPP source files" superClass="it.baeyens.arduino.compiler.cpp.sketch.input"/>
 							</tool>
 							<tool id="it.baeyens.arduino.tool.compiler.c.2085772419" name="Arduino C Compiler" superClass="it.baeyens.arduino.tool.compiler.c">
+								<option id="it.baeyens.arduino.compiler.c.sketch.option.incpath.2069560410" superClass="it.baeyens.arduino.compiler.c.sketch.option.incpath" valueType="includePath">
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/pbsculpt3/libraries/Metro}&quot;"/>
+								</option>
 								<inputType id="it.baeyens.arduino.compiler.c.sketch.input.800391586" name="C Source Files" superClass="it.baeyens.arduino.compiler.c.sketch.input"/>
 							</tool>
 							<tool id="it.baeyens.arduino.tool.sketch.compiler.s.700340726" name="Arduino Assembler" superClass="it.baeyens.arduino.tool.sketch.compiler.s"/>
