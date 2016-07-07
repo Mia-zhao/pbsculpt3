@@ -7,6 +7,8 @@ Behaviour exponentialBehaviour;
 // The number of points
 const int n_timeValue = 18;
 
+int divisor = 1;
+
 // Timings in microseconds
 unsigned long timeValue[n_timeValue][2] = {
 		{0L, 0L},
@@ -61,6 +63,18 @@ void loop()
 	exponentialBehaviour.loop();
 
 	SoftPWMSet(LED_BUILTIN, exponentialBehaviour.value());
+
+	if( !exponentialBehaviour.isPlaying() ){
+		divisor *= 2;
+		exponentialBehaviour.setValueDivisor(divisor);
+		exponentialBehaviour.play();
+
+		Serial.printf("Playing at 1/%d value\n", divisor);
+
+		if( divisor > 512 ){
+			divisor = 1;
+		}
+	}
 
 	delay(10);
 }

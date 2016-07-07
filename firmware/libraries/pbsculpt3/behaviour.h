@@ -14,6 +14,7 @@
 
 #define DEBUG_BEHAVIOUR 0
 
+#include "tools.h"
 #include <LinkedList.h>
 #include <elapsedMillis.h>
 
@@ -138,7 +139,7 @@ public:
 	 */
 	void setValueMultiplier( int mux);
 
-	/**Set the divisor for the time in order to compress the behaviour
+	/**Set the divisor for the value in order to compress the behaviour
 	 *
 	 * @param div Division factor
 	 */
@@ -180,6 +181,8 @@ public:
 private:
     unsigned long currentPointStartTime();
     unsigned long nextPointStartTime();
+    unsigned long currentPointStartValue();
+    unsigned long nextPointStartValue();
 
     /** Advance to the next set of control points.
      *

@@ -25,6 +25,8 @@
 #define LOCAL_BG_ACTIVITY_INHIBITION_FACTOR 4
 #define COMMUNAL_BG_ACTIVITY_INHIBITION_FACTOR 20
 
+#define BACKGROUND_LED_DIVISOR 16
+
 HighPowerLED::HighPowerLED(int address, char  port, int pin, bool fastPWM) :
 Peripheral(address, 3, port, pin, fastPWM), _value(0.0), _fadeInitValue(0.0), _fadeDuration(0),
     _fadeTime(0), _fadeTarget(0), _inactivityThreshold(INACTIVITY_THRESHOLD),
@@ -62,6 +64,8 @@ Peripheral(address, 3, port, pin, fastPWM), _value(0.0), _fadeInitValue(0.0), _f
 
 		_backgroundBehaviour.points.add(point);
 	}
+
+	_backgroundBehaviour.setValueDivisor(BACKGROUND_LED_DIVISOR);
 }
 
 void HighPowerLED::init(){

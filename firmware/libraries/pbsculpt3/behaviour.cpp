@@ -54,10 +54,10 @@ int Behaviour::value(){
 	switch(_state){
 	case PLAYING:
 	{
-		long t_1 = _lastPoint->time;
-		long t_2 = _nextPoint->time;
-		long v_1 = (long) _lastPoint->value;
-		long v_2 = (long) _nextPoint->value;
+		long t_1 = currentPointStartTime();
+		long t_2 = nextPointStartTime();
+		long v_1 = currentPointStartValue();
+		long v_2 = nextPointStartValue();
 		long v_d = v_2 - v_1;
 		long t_d = t_2 - t_1;
 		long t_from_last = _runTime - t_1;
@@ -160,14 +160,22 @@ unsigned long Behaviour::currentPointStartTime(){
 	return (_lastPoint->time * _timeMux) / _timeDiv;
 }
 
+unsigned long Behaviour::nextPointStartValue(){
+	return (_nextPoint->value * _valueMux) / _valueDiv;
+}
+
+unsigned long Behaviour::currentPointStartValue(){
+	return (_lastPoint->value * _valueMux) / _valueDiv;
+}
+
 bool Behaviour::advancePoint(){
 
 	_i_lastPoint += 1;
 
 	bool success = loadPoints();
 
-#if DEBUG_BEHAVIOUR > 2
-	Serial.printf("BEHAVIOUR: Advance Called. i: %d/%d, success: %d.\n", _i_lastPoint, points.size(), (int)success);
+#if DEBUG_BEHAVIOUR > 1
+	DBGF("BEHAVIOUR","Advance Called. i: %d/%d, value:%d, success: %d.\n", _i_lastPoint, points.size(), currentPointStartValue(), (int)success)
 #endif
 
 	return success;
