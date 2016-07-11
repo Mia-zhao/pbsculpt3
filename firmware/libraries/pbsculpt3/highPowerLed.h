@@ -32,6 +32,12 @@ class HighPowerLED : public Peripheral {
         void handleLocalNeighbourBackgroundActivation();
         void handleNeighbourBackgroundActivation();
         
+        /**
+         *
+         * @param level
+         */
+        void setBackgroundLevel(int level);
+
     protected:
         void _setPinToValue();
         void _switchToBackgroundMode();

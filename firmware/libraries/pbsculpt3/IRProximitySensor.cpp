@@ -10,7 +10,8 @@
 #include <Arduino.h>
 
 IRProximitySensor::IRProximitySensor(int address, char port, int pin, bool fastPWM) :
-Peripheral(address, DEVICE_TYPE_PHOTO_SENSOR, port, pin, fastPWM){
+	Peripheral(address, DEVICE_TYPE_PHOTO_SENSOR, port, pin, fastPWM),
+	__capacitiveActivation(__IR_PROX_ACTIVATION_THRESHOLD){
 
 }
 
@@ -23,6 +24,13 @@ void IRProximitySensor::init(){
 }
 
 void IRProximitySensor::loop(){
+	__capacitiveActivation.loop();
+	__capacitiveActivation.addReading(analogRead(_pin));
+
+	if(__capacitiveActivation.isActivated()){
+		PeripheralEvent e = {Activation,(long)time,_type,_port,_address};
+		events.push(e);
+	}
 }
 
 int IRProximitySensor::fade(int target, int duration){

@@ -83,7 +83,7 @@ template<typename T> bool LimitedQueue<T>::add(int index, T _t){
 }
 
 template<typename T> void LimitedQueue<T>::_shrinkQueue(){
-	DBGF("LimitedQueue", "Queue size: %d", this->size() );
+	//DBGF("LimitedQueue", "Queue size: %d", this->size() );
 	while(this->size() > _maxLength ){
 		this->pop();
 	}

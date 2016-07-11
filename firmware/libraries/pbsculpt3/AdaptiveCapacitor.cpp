@@ -23,7 +23,7 @@ void AdaptiveCapacitor::loop(){
 	// check if the metro has passed it's interval and if there are new readings.
 	if (readMetro.check() == 1 && readingCount > 0) {
 
-		DBGF("AdaptCap", "Readings: %d / %d = %d", readingSum, readingCount, readingSum/readingCount)
+		//DBGF("AdaptCap", "Readings: %d / %d = %d", readingSum, readingCount, readingSum/readingCount)
 
 		// Calculate the last reading
 		unsigned long lastReading = readingSum/readingCount;
@@ -48,12 +48,13 @@ void AdaptiveCapacitor::loop(){
 			level = 0;
 		}
 
-		DBGF("AdaptCap", "Averages: Long = %d, Short = %d, Level = %d", long_avg, short_avg, level)
+		//DBGF("AdaptCap", "Averages: Long = %d, Short = %d, Level = %d", long_avg, short_avg, level)
 	}
 }
 
 bool AdaptiveCapacitor::isActivated(){
 	if( level > threshold ){
+		DBGF("AdaptCap", "Activation! Long: %d, Short %d\n", long_avg, short_avg)
 		level = 0;
 		return true;
 	}

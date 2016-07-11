@@ -20,9 +20,9 @@
 
 #else
 
-#define DBG(msg)
-#define DBGLN(pre,msg)
-#define DBGF(pre,msg, args...)
+#define DBG(msg) do {} while(0)
+#define DBGLN(pre,msg) do {} while(0)
+#define DBGF(pre,msg, args...) do {} while(0)
 
 #endif
 

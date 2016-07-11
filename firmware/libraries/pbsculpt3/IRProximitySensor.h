@@ -9,6 +9,9 @@
 #define IRPROXIMITYSENSOR_H_
 
 #include <peripheral.h>
+#include "AdaptiveCapacitor.h"
+
+#define __IR_PROX_ACTIVATION_THRESHOLD 10000
 
 class IRProximitySensor: public Peripheral {
 public:
@@ -21,6 +24,10 @@ public:
 	int fade(int target, int duration);
 	int read(int preprocessType);
 	int value();
+
+private:
+
+	data::AdaptiveCapacitor __capacitiveActivation;
 };
 
 #endif /* IRPROXIMITYSENSOR_H_ */

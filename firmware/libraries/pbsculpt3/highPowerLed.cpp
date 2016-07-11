@@ -226,3 +226,7 @@ void HighPowerLED::handleNeighbourBackgroundActivation(){
 			break;
 	}
 }
+
+void HighPowerLED::setBackgroundLevel(int level){
+	_backgroundBehaviour.setValueDivisor(level);
+}
