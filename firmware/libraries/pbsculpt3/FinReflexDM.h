@@ -10,6 +10,7 @@
 
 #define __RIGHT_SMA_ADDRESS 3
 #define __LEFT_SMA_ADDRESS	4
+#define __IR_PROX_ADDRESS 5
 
 #include "deviceModule.h"
 

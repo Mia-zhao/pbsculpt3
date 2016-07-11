@@ -9,6 +9,7 @@
 
 #include "FinReflexDM.h"
 #include "FinSMA.h"
+#include "IRProximitySensor.h"
 
 #include "tools.h"
 #include <stdio.h>
@@ -26,6 +27,10 @@ void FinReflexDM::init(){
     FinSMA* leftSMA = new FinSMA(__LEFT_SMA_ADDRESS, _port,
     		getPinForAddress(__LEFT_SMA_ADDRESS), hasFastPWMForAddress(__LEFT_SMA_ADDRESS));
     peripherals.add(leftSMA);
+
+    IRProximitySensor* reflex = new IRProximitySensor(__IR_PROX_ADDRESS, _port,
+    		getPinForAddress(__IR_PROX_ADDRESS), hasFastPWMForAddress(__IR_PROX_ADDRESS));
+    peripherals.add(reflex);
 }
 
 void FinReflexDM::loop(){
