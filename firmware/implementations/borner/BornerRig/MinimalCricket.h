@@ -34,6 +34,8 @@ public:
 protected:
 
     Peripheral* getPeripheralAt(char addr);
+
+    virtual void handleDeviceNeighbourActivation(PeripheralEvent e);
 };
 
 #endif /* MINIMALCRICKET_H_ */

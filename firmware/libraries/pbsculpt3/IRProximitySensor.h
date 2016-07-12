@@ -11,7 +11,7 @@
 #include <peripheral.h>
 #include "AdaptiveCapacitor.h"
 
-#define __IR_PROX_ACTIVATION_THRESHOLD 10000
+#define __IR_PROX_ACTIVATION_THRESHOLD 100000
 
 class IRProximitySensor: public Peripheral {
 public:

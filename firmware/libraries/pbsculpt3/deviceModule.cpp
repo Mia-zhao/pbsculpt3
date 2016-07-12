@@ -35,12 +35,10 @@ void DeviceModule::loop(){
 	for(int i=0; i<peripherals.size(); i++){
 		while(peripherals.get(i)->events.size() > 0){
 			PeripheralEvent event = peripherals.get(i)->events.shift();
-			switch(event.type){
-			default:
-				DBGLN("DM", "Pushing event.")
-				events.push(event);
-				break;
-			}
+
+			DBGLN("DM", "Pushing event.")
+			events.push(event);
+			handleDeviceNeighbourEvent(event);
 		}
 	}
 }
@@ -112,10 +110,26 @@ int DeviceModule::getPinForAddress(int address){
 	return -1; // Is this right? Something's wrong.
 }
 
-void DeviceModule::handleLocalNeighbourEvent(PeripheralEvent e){
+void DeviceModule::handleDeviceNeighbourEvent(PeripheralEvent e){
 	switch (e.type) {
 		case BackgroundActivation:
-			handleLocalNeighbourBackgroundActivation();
+			handleDeviceNeighbourBackgroundActivation(e);
+			break;
+		case Activation:
+			handleDeviceNeighbourActivation(e);
+			break;
+		default:
+			break;
+	}
+}
+
+void DeviceModule::handleNodeNeighbourEvent(PeripheralEvent e){
+	switch (e.type) {
+		case BackgroundActivation:
+			handleNodeNeighbourBackgroundActivation(e);
+			break;
+		case Activation:
+			handleNodeNeighbourActivation(e);
 			break;
 		default:
 			break;
@@ -125,22 +139,52 @@ void DeviceModule::handleLocalNeighbourEvent(PeripheralEvent e){
 void DeviceModule::handleNeighbourEvent(PeripheralEvent e){
 	switch (e.type) {
 		case BackgroundActivation:
-			handleNeighbourBackgroundActivation();
+			handleNeighbourBackgroundActivation(e);
+			break;
+		case Activation:
+			handleNeighbourActivation(e);
 			break;
 		default:
 			break;
 	}
 }
 
-
-void DeviceModule::handleLocalNeighbourBackgroundActivation(){
+void DeviceModule::handleDeviceNeighbourBackgroundActivation(PeripheralEvent e){
 	for( int i=0; i<peripherals.size(); i++ ){
-		peripherals.get(i)->handleLocalNeighbourBackgroundActivation();
+		peripherals.get(i)->handleDeviceNeighbourBackgroundActivation(e);
 	}
 }
 
-void DeviceModule::handleNeighbourBackgroundActivation(){
+void DeviceModule::handleDeviceNeighbourActivation(PeripheralEvent e){
+	DBGLN("DM", "Got device neighbour activation")
+	/*for( int i=0; i<peripherals.size(); i++ ){
+		peripherals.get(i)->handleDeviceNeighbourActivation(e);
+	}*/
+}
+
+
+void DeviceModule::handleNodeNeighbourBackgroundActivation(PeripheralEvent e){
 	for( int i=0; i<peripherals.size(); i++ ){
-		peripherals.get(i)->handleNeighbourBackgroundActivation();
+		peripherals.get(i)->handleNodeNeighbourBackgroundActivation(e);
 	}
+}
+
+void DeviceModule::handleNeighbourBackgroundActivation(PeripheralEvent e){
+	for( int i=0; i<peripherals.size(); i++ ){
+		peripherals.get(i)->handleNeighbourBackgroundActivation(e);
+	}
+}
+
+
+void DeviceModule::handleNodeNeighbourActivation(PeripheralEvent e){
+	/*for( int i=0; i<peripherals.size(); i++ ){
+		peripherals.get(i)->handleLocalNeighbourBackgroundActivation(e);
+	}*/
+
+}
+
+void DeviceModule::handleNeighbourActivation(PeripheralEvent e){
+	/*for( int i=0; i<peripherals.size(); i++ ){
+		peripherals.get(i)->handleNeighbourBackgroundActivation(e);
+	}*/
 }

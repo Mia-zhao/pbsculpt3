@@ -70,8 +70,11 @@ class Peripheral {
 
         elapsedMillis time;
 
-        virtual void handleLocalNeighbourBackgroundActivation();
-        virtual void handleNeighbourBackgroundActivation();
+        virtual void handleDeviceNeighbourBackgroundActivation(PeripheralEvent e);
+        virtual void handleNodeNeighbourBackgroundActivation(PeripheralEvent e);
+        virtual void handleNeighbourBackgroundActivation(PeripheralEvent e);
+
+        virtual void startReflexBehaviour();
 
     protected:
         char _port;

@@ -26,6 +26,7 @@
 #define COMMUNAL_BG_ACTIVITY_INHIBITION_FACTOR 20
 
 #define BACKGROUND_LED_DIVISOR 16
+#define REFLEX_LED_DIVISOR 1
 
 HighPowerLED::HighPowerLED(int address, char  port, int pin, bool fastPWM) :
 Peripheral(address, 3, port, pin, fastPWM), _value(0.0), _fadeInitValue(0.0), _fadeDuration(0),
@@ -65,7 +66,54 @@ Peripheral(address, 3, port, pin, fastPWM), _value(0.0), _fadeInitValue(0.0), _f
 		_backgroundBehaviour.points.add(point);
 	}
 
-	_backgroundBehaviour.setValueDivisor(BACKGROUND_LED_DIVISOR);
+	_reflexBehaviour.setValueDivisor(BACKGROUND_LED_DIVISOR);
+	// Set up background behaviour
+	    const int n_reflex_timeValue = 32;
+	    unsigned long reflex_timeValue[n_reflex_timeValue][2] = {
+	    		{0L, 0L},
+	    		{100000L, 30L},
+	    		{200000L, 86L},
+	    		{300000L, 134L},
+	    		{400000L, 174L},
+	    		{500000L, 206L},
+	    		{600000L, 230L},
+	    		{700000L, 246L},
+	    		{800000L, 254L},
+	    		{900000L, 254L},
+	    		{1000000L, 246L},
+	    		{1100000L, 230L},
+	    		{1200000L, 206L},
+	    		{1300000L, 174L},
+	    		{1400000L, 134L},
+	    		{1500000L, 86L},
+	    		{1600000L, 86L},
+	    		{1700000L, 134L},
+	    		{1800000L, 174L},
+	    		{1900000L, 206L},
+	    		{2000000L, 230L},
+	    		{2100000L, 246L},
+	    		{2200000L, 254L},
+	    		{2300000L, 254L},
+	    		{2400000L, 246L},
+	    		{2500000L, 230L},
+	    		{2600000L, 206L},
+	    		{2700000L, 174L},
+	    		{2800000L, 134L},
+	    		{2900000L, 86L},
+	    		{3000000L, 30L},
+	    		{3100000L, 0L},
+	    };
+	    _reflexBehaviour = Behaviour();
+
+		for( int i = 0; i < n_reflex_timeValue; i++ ){
+			Point *point = new Point();
+			point->time = reflex_timeValue[i][0];
+			point->value = reflex_timeValue[i][1];
+
+			_reflexBehaviour.points.add(point);
+		}
+
+		_reflexBehaviour.setValueDivisor(REFLEX_LED_DIVISOR);
 }
 
 void HighPowerLED::init(){
@@ -93,6 +141,11 @@ void HighPowerLED::loop(){
 		// Reset the inactivity timer if there is activity.
 		if( _value > 0 ){
 			inactivityTimer = 0;
+		}
+
+		if(_reflexBehaviour.isPlaying()){
+			_reflexBehaviour.loop();
+			_value = _reflexBehaviour.value();
 		}
 
 		break;
@@ -197,6 +250,17 @@ void HighPowerLED::_startBackgroundActivation(){
 	// Log the event
 	PeripheralEvent e = {BackgroundActivation,(long)time,_type,_port,_address};
 	events.push(e);
+}
+
+void HighPowerLED::startReflexBehaviour(){
+	if( mode == BACKGROUND ){
+		mode = ACTIVE;
+	}
+
+	_reflexBehaviour.play();
+
+	PeripheralEvent e = {Activation, (long)time, _type, _port, _address};
+	DBGLN("HighPoweredLED", "Started Reflex Behaviour")
 }
 
 void HighPowerLED::handleLocalNeighbourBackgroundActivation(){

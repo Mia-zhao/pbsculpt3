@@ -45,16 +45,22 @@ class DeviceModule {
         LimitedQueue<PeripheralEvent> events;
         elapsedMillis time;
 
-        void handleLocalNeighbourEvent(PeripheralEvent e);
-        void handleNeighbourEvent(PeripheralEvent e);
+        virtual void handleDeviceNeighbourEvent(PeripheralEvent e);
+        virtual void handleNodeNeighbourEvent(PeripheralEvent e);
+        virtual void handleNeighbourEvent(PeripheralEvent e);
 
     protected:
         char _port;
         LinkedList<Peripheral*> peripherals;
         const uint8_t * _fpwm, * _spwm, * _analog;
 
-        virtual void handleLocalNeighbourBackgroundActivation();
-        virtual void handleNeighbourBackgroundActivation();
+        virtual void handleDeviceNeighbourBackgroundActivation(PeripheralEvent e);
+        virtual void handleNodeNeighbourBackgroundActivation(PeripheralEvent e);
+        virtual void handleNeighbourBackgroundActivation(PeripheralEvent e);
+
+        virtual void handleDeviceNeighbourActivation(PeripheralEvent e);
+        virtual void handleNodeNeighbourActivation(PeripheralEvent e);
+        virtual void handleNeighbourActivation(PeripheralEvent e);
 
 };
 

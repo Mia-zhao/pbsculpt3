@@ -38,6 +38,8 @@ class HighPowerLED : public Peripheral {
          */
         void setBackgroundLevel(int level);
 
+        void startReflexBehaviour();
+
     protected:
         void _setPinToValue();
         void _switchToBackgroundMode();
@@ -80,6 +82,7 @@ class HighPowerLED : public Peripheral {
         GaussianRandom _randGenerator;
 
         Behaviour _backgroundBehaviour;
+        Behaviour _reflexBehaviour;
 };
 
 #endif

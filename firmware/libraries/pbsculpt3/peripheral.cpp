@@ -5,6 +5,8 @@
 
 #include "peripheral.h"
 
+#include "tools.h"
+
 #include <Arduino.h>
 
 #define MAX_EVENTS 10
@@ -24,5 +26,10 @@ int Peripheral::address(){
     return _address;
 }
 
-void Peripheral::handleLocalNeighbourBackgroundActivation(){}
-void Peripheral::handleNeighbourBackgroundActivation(){}
+void Peripheral::handleDeviceNeighbourBackgroundActivation(PeripheralEvent e){}
+void Peripheral::handleNodeNeighbourBackgroundActivation(PeripheralEvent e){}
+void Peripheral::handleNeighbourBackgroundActivation(PeripheralEvent e){}
+
+void Peripheral::startReflexBehaviour(){
+	DBGLN("Peripheral", "Starting Reflex Behaviour.")
+}

@@ -166,7 +166,7 @@ void loop() {
     		// Make sure other DMs see the event.
     		for( int j=0; j<node.deviceCount(); j++ ){
     			if( i!=j ){ // Don't send the event back to the sender
-    				node.devices[j]->handleLocalNeighbourEvent(e);
+    				node.devices[j]->handleNodeNeighbourEvent(e);
     			}
     		}
 #if DEBUG

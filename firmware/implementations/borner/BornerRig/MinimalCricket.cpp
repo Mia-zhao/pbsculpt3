@@ -7,6 +7,7 @@
 
 #include "MinimalCricket.h"
 #include "highPowerLed.h"
+#include "IRProximitySensor.h"
 
 #include "tools.h"
 #include <stdio.h>
@@ -44,9 +45,9 @@ void MinimalCricket::init(){
     led4->setBackgroundLevel(1);
     peripherals.add(led4);
 
-    /*AmbientLightSensor* ambientLight = new AmbientLightSensor(PHOTO_ADDRESS, _port,
-    		getPinForAddress(PHOTO_ADDRESS), hasFastPWMForAddress(PHOTO_ADDRESS));
-    peripherals.add(ambientLight);*/
+    IRProximitySensor* proximity = new IRProximitySensor(PROX_ADDRESS, _port,
+    		getPinForAddress(PROX_ADDRESS), hasFastPWMForAddress(PROX_ADDRESS));
+    peripherals.add(proximity);
 }
 
 void MinimalCricket::loop(){
@@ -108,4 +109,15 @@ Peripheral* MinimalCricket::getPeripheralAt(char addr){
        }
     }
     return NULL;
+}
+
+void MinimalCricket::handleDeviceNeighbourActivation(PeripheralEvent e){
+	DBGLN("MinimalCricket", "Found device neighbour activation.")
+
+	DeviceModule::handleNodeNeighbourActivation(e);
+
+	if( e.peripheralType == DEVICE_TYPE_PHOTO_SENSOR ){
+		Peripheral* reflex = peripherals.get(3);
+		reflex->startReflexBehaviour();
+	}
 }
