@@ -54,7 +54,7 @@ void AdaptiveCapacitor::loop(){
 
 bool AdaptiveCapacitor::isActivated(){
 	if( level > threshold ){
-		DBGF("AdaptCap", "Activation! Long: %d, Short %d\n", long_avg, short_avg)
+		DBGF("AdaptCap", "Activation! Long: %d, Short %d", long_avg, short_avg)
 		level = 0;
 		return true;
 	}

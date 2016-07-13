@@ -25,7 +25,15 @@ enum PeripheralMode {
 };
 
 enum EventType {
+	// Mode Switching
+	OffMode,
+	TestMode,
+	SilentMode,
+	ActiveMode,
 	BackgroundMode,
+	SlaveMode,
+
+	// Activations
 	BackgroundActivation,
 	Activation,
 };
@@ -76,7 +84,19 @@ class Peripheral {
 
         virtual void startReflexBehaviour();
 
+        static PeripheralEvent getEvent(EventType type, long time, int PeripheralType, char port, int address);
+
     protected:
+
+        virtual void switchMode(PeripheralMode newMode);
+
+        virtual	void switchModeOff();
+        virtual	void switchModeTest();
+        virtual	void switchModeSilent();
+        virtual	void switchModeActive();
+        virtual	void switchModeBackground();
+        virtual	void switchModeSlave();
+
         char _port;
         int _address;
         int _type;

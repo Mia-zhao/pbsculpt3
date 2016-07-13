@@ -187,7 +187,7 @@ void HighPowerLED::backgroundBehaviour(){
 	case ACTIVE:
 		if( inactivityTimer > _inactivityThreshold){
 			DBGLN("HighPowerLED", "Switching to Background mode...")
-			_switchToBackgroundMode();
+			switchMode(PeripheralMode::BACKGROUND);
 		}
 
 		break;
@@ -224,19 +224,21 @@ void HighPowerLED::_setPinToValue(){
 /** Switch to background mode. Only called if not in background mode already.
  *
  */
-void HighPowerLED::_switchToBackgroundMode(){
-	if( mode != BACKGROUND ){
-		mode = BACKGROUND;
-		_accumulator = 0; // Reset accumulator
-		_accumulationTimer = 0; // Reset timer
-		_rand = _randGenerator.randLong();
+void HighPowerLED::switchModeBackground(){
+	_accumulator = 0; // Reset accumulator
+	_accumulationTimer = 0; // Reset timer
+	_rand = _randGenerator.randLong();
 
-		PeripheralEvent e = {BackgroundMode,time,_type,_port,_address};
-		DBGLN("HighPowerLED", "Background event created...")
+	PeripheralEvent e = {BackgroundMode,time,_type,_port,_address};
+	DBGLN("HighPowerLED", "Background event created...")
 
-		events.push(e);
-		DBGLN("HighPowerLED", "Background event pushed...")
-	}
+	events.push(e);
+	DBGLN("HighPowerLED", "Background event pushed...")
+}
+
+void HighPowerLED::switchModeActive(){
+	// Reset the inactivity timer so that it stays active
+	inactivityTimer = 0;
 }
 
 void HighPowerLED::_startBackgroundActivation(){
@@ -253,14 +255,18 @@ void HighPowerLED::_startBackgroundActivation(){
 }
 
 void HighPowerLED::startReflexBehaviour(){
-	if( mode == BACKGROUND ){
-		mode = ACTIVE;
-	}
+	// Switch to active mode if we haven't already
+	switchMode(PeripheralMode::ACTIVE);
 
+	// Reset the inactivity timer
+	inactivityTimer = 0;
+
+	// Engage reflex behaviour
 	_reflexBehaviour.play();
 
 	PeripheralEvent e = {Activation, (long)time, _type, _port, _address};
-	DBGLN("HighPoweredLED", "Started Reflex Behaviour")
+	events.add(e);
+	DBGF("HighPoweredLED", "Started Reflex Behaviour on %d:%d", _port, _address)
 }
 
 void HighPowerLED::handleLocalNeighbourBackgroundActivation(){

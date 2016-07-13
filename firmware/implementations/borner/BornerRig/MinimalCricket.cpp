@@ -112,12 +112,21 @@ Peripheral* MinimalCricket::getPeripheralAt(char addr){
 }
 
 void MinimalCricket::handleDeviceNeighbourActivation(PeripheralEvent e){
-	DBGLN("MinimalCricket", "Found device neighbour activation.")
+	DBGF("MinimalCricket", "Found device neighbour activation pType:%d, eType:%d, addr:%d.", e.peripheralType, e.type, e.address)
 
-	DeviceModule::handleNodeNeighbourActivation(e);
+	DeviceModule::handleDeviceNeighbourActivation(e);
 
 	if( e.peripheralType == DEVICE_TYPE_PHOTO_SENSOR ){
 		Peripheral* reflex = peripherals.get(3);
 		reflex->startReflexBehaviour();
+	} else if ( e.type == EventType::Activation ){
+		// Set up chain behaviours
+		if ( e.address == 4 ) {
+			Peripheral* reflex = peripherals.get(2);
+			reflex->startReflexBehaviour();
+		} else if ( e.address == 3 ){
+			Peripheral* reflex = peripherals.get(1);
+			reflex->startReflexBehaviour();
+		}
 	}
 }

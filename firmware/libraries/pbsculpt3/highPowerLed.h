@@ -41,8 +41,10 @@ class HighPowerLED : public Peripheral {
         void startReflexBehaviour();
 
     protected:
+
         void _setPinToValue();
-        void _switchToBackgroundMode();
+        void switchModeBackground();
+        void switchModeActive();
         void _startBackgroundActivation();
 
         float _value, _fadeInitValue;
