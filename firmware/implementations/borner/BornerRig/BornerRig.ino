@@ -83,26 +83,26 @@ void setup() {
 
 	digitalWrite(LED_BUILTIN, LOW);
 
-	DBG("Booting");
+	DBG(2, "Booting");
 
 	// put your setup code here, to run once:
 	node.devices[0] = new EmptyDeviceModule(1);
-	DBG(".");
+	DBG(2, ".");
 	node.devices[1] = new EmptyDeviceModule(2);
-	DBG(".");
+	DBG(2, ".");
 	node.devices[2] = new EmptyDeviceModule(3);
-	DBG(".");
+	DBG(2, ".");
 	node.devices[3] = new EmptyDeviceModule(4);
-	DBG(".");
+	DBG(2, ".");
 	node.devices[4] = new MinimalCricket(5);
-	DBG(".");
+	DBG(2, ".");
 	node.devices[5] = new EmptyDeviceModule(6);
-	DBGLN("Actuation",".");
+	DBGLN(2, "Actuation",".");
 
 	node.init();
-	DBG("Getting Serial Number");
+	DBG(2, "Getting Serial Number");
 	node._serialNumber = serialCommSetup();
-	DBGLN("Actuation","Finished Booting.");
+	DBGLN(2, "Actuation","Finished Booting.");
 
 #if DEBUG
 	sCmd.addCommand("NDEV", cmdQueryNumDevices); // Finds the number of devices present.
@@ -112,26 +112,24 @@ void setup() {
 	xbee_setup();
 #endif
 
-	Serial.println("Done booting. Awaiting commands, Master...");
-
 	int nd = getNumDevices();
 
-	Serial.printf("Got %i devices\n", nd);
+	DBGF(2, "Got %i devices\n", nd)
 
 	int np = getNumPeripherals();
 
-	Serial.printf("Got %i peripherals\n", np);
+	DBGF(2, "Got %i peripherals\n", np)
 
 	int pos = 0;
 	pos = loadAddresses(&dataOut[0]);
 
-	Serial.printf("Loaded Addresses in %i positions\n", pos);
+	DBGF(2, "Loaded Addresses in %i positions\n", pos)
 
 	for(int i=0; i<pos; i++){
 		if((i+1) % 3 == 0)
-			Serial.println(dataOut[i]);
+			DBG(2, dataOut[i])
 		else
-			Serial.print(dataOut[i]);
+			DBG(2, dataOut[i])
 	}
 
 }
@@ -159,7 +157,7 @@ void loop() {
     for( int i=0; i<node.deviceCount(); i++ ){
     	DeviceModule *dm = node.devices[i];
     	if(dm->events.size()>0){
-    		DBGF("MAIN-EVT", "Found an event from DM on port %d", i+1);
+    		DBGF(2, "MAIN-EVT", "Found an event from DM on port %d", i+1);
 
     		PeripheralEvent e = dm->events.shift();
 
@@ -300,7 +298,7 @@ void xbee_loop(){
 
             uint8_t * data = rx.getData();
 
-            DBGF("MAIN-XB", "Got an XBee Message: %d", data[0]);
+            DBGF(2, "MAIN-XB", "Got an XBee Message: %d", data[0]);
 
             if(data[0] == XBeeMessageType::Ping){
             	Serial.println("Ping...");
@@ -316,16 +314,16 @@ void xbee_loop(){
 		      // get the delivery status, the fifth byte
 		      if (txStatus.getDeliveryStatus() == SUCCESS) {
 		        // success.  time to celebrate
-		        DBGLN("MAIN-XB", "Broadcast Successful.")
+		        DBGLN(2, "MAIN-XB", "Broadcast Successful.")
 		      } else {
 		        // the remote XBee did not receive our packet. is it powered on?
-		        DBGLN("MAIN-XB", "Broadcast Error. XB did not receive our package.")
+		        DBGLN(2, "MAIN-XB", "Broadcast Error. XB did not receive our package.")
 		      }
 		    }
     } else if (xbee.getResponse().isError()) {
 	    //nss.print("Error reading packet.  Error code: ");
 	    //nss.println(xbee.getResponse().getErrorCode());
-	        DBGF("MAIN-XB", "Error reading packet.  Error code: %d", xbee.getResponse().getErrorCode())
+	        DBGF(2, "MAIN-XB", "Error reading packet.  Error code: %d", xbee.getResponse().getErrorCode())
 	}/* else {
 	    // local XBee did not provide a timely TX Status Response -- should not happen
 	        DBGLN("MAIN-XB", "Error. local XBee did not provide a timely TX Status Response")
@@ -346,11 +344,11 @@ void xbee_loop_event(PeripheralEvent e){
 	//zbTx.setAddress16(0x0000);//FFFE);
 	//zbTx.setOption(ZB_TX_BROADCAST);
 
-	DBGF("MAIN-XB", "Sending payload: %d %d %d %d %d", payload[0], payload[1], payload[2], payload[3], payload[4]);
+	DBGF(1, "MAIN-XB", "Sending payload: %d %d %d %d %d", payload[0], payload[1], payload[2], payload[3], payload[4]);
 
 	xbee.send(zbTx);
 
-	DBGF("MAIN-XB", "Payload Sent to %X %X 0x%X %d %d %d | %d %d",
+	DBGF(2, "MAIN-XB", "Payload Sent to %X %X 0x%X %d %d %d | %d %d",
 			zbTx.getAddress64().getMsb(), zbTx.getAddress64().getLsb(),
 			zbTx.getAddress16(),
 			zbTx.getBroadcastRadius(), zbTx.getOption(), zbTx.getPayloadLength(),
@@ -545,7 +543,7 @@ void sendMessage(long int sendTo, uint8_t sendCmd, long int sendSize) {
 
 void serialCommLoop() {
 	if (Serial.available() > 0) {
-		DBG("Got a Serial Message...")
+		DBG(2, "Got a Serial Message...")
 
 		//Serial.println("Serial Available...");
 
