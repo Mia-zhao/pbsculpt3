@@ -28,27 +28,8 @@ void ProprioceptiveLed::init(){
     AmbientLightSensor* ambientLight = new AmbientLightSensor(PHOTO_ADDRESS, _port,
     		getPinForAddress(PHOTO_ADDRESS), hasFastPWMForAddress(PHOTO_ADDRESS));
     peripherals.add(ambientLight);
-}
 
-void ProprioceptiveLed::loop(){
-    /*int n = devices.size();
-    Serial.printf("Looping propLed for %i devices...\n", n);
-    for(int i=0; i<n; i++){
-        Serial.printf("Looping propLed: device %i...\n", i);
-        devices[i]->loop();
-        Serial.printf("Done looping propLed: device %i...\n", i);
-    }*/
-    //Serial.printf("Looping propLed for %i devices...\n", devices.size());
-	DeviceModule::loop();
-    
-    for (int i=0; i<peripherals.size(); i++) {
-        //Serial.printf("Looping propLed: device %i...\n", i);
-        //Serial.printf("propLed properties: %i, %i, %i, %i\n", iter->second->_value, iter->second->_fadeDuration, iter->second->_fadeTarget, iter->second->_fadeTime);
-        //Serial.println(iter->second->address());
-    	peripherals.get(i)->loop();
-    }
-    
-    //Serial.printf("Done looping propLed...\n");
+    DeviceModule::init();
 }
 
 bool ProprioceptiveLed::fade(int address, int target, int duration){

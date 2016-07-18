@@ -22,11 +22,23 @@ public:
 
 	/** Filters sensory data to trigger activations
 	 *
+	 *	The AdaptiveCapacitor imagines sensor readings as a bucket. The bucket
+	 *	has an inflow rate and and outflow rate and is triggered when it is
+	 *	filled to a pre-defined level (threshold). The inflow and outflow are
+	 *	controlled by running averages of sensor data, the inflow being a
+	 *	short-term average, and the outflow being a long-term average.
+	 *	This allows the system to account for drift in the sensor values while
+	 *	being reactive to short term triggerings of the sensor.
 	 *
+	 * @param threshold The level at which to trigger the sensor
 	 */
 	AdaptiveCapacitor(unsigned long threshold);
 	virtual ~AdaptiveCapacitor();
 
+	/** Loop is called once per Arduino cycle to register new readings and
+	 * 	proces any data that is necessary.
+	 *
+	 */
 	void loop();
 
 	/** Check to see if the capacitor has been activated.
@@ -38,6 +50,10 @@ public:
 	 */
 	bool isActivated();
 
+	/**
+	 *
+	 * @param reading
+	 */
 	void addReading(int reading);
 
 protected:

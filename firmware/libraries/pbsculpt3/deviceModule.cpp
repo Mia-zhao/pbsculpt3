@@ -31,12 +31,26 @@ DeviceModule::DeviceModule(char port):
     peripherals = LinkedList<Peripheral*>();
 }
 
+void DeviceModule::init(){
+    for (int i=0; i<peripherals.size(); i++) {
+    	peripherals.get(i)->init();
+    }
+}
+
 void DeviceModule::loop(){
+
+	// Call the loop function for the DM's peripherals
+    for (int i=0; i<peripherals.size(); i++) {
+    	peripherals.get(i)->loop();
+    }
+
+    // Push events up the chain (from peripherals) and call any relevant local event handlers
 	for(int i=0; i<peripherals.size(); i++){
 		while(peripherals.get(i)->events.size() > 0){
 			PeripheralEvent event = peripherals.get(i)->events.shift();
 
-			DBGLN("DM", "Pushing event.")
+			DBGLN("DM", "Pushing event.");
+
 			events.push(event);
 			handleDeviceNeighbourEvent(event);
 		}

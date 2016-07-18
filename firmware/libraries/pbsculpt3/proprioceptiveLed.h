@@ -20,7 +20,6 @@ class ProprioceptiveLed: public DeviceModule {
         ProprioceptiveLed(char port);
         
         void init();
-        void loop();
         
         bool fade(int address, int target, int duration);
         int  read(int address, int preprocessType);
