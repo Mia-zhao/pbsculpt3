@@ -256,7 +256,7 @@ void serialCommLoop() {
             // dataIn[0] > port, dataIn[1] > type, dataIn[2] > address, dataIn[3] > value, dataIn[4] > duration
             if (DEBUG) Serial.printf("Fading device %d to %d...\n", dataIn[2], dataIn[3]);
 
-            doFade(dataIn[0], dataIn[1], dataIn[2], dataIn[3], dataIn[4]);
+            doFade(dataIn[2], dataIn[1], dataIn[0], dataIn[3], dataIn[4]);
 
             if (DEBUG) Serial.printf("New value for LED%d is %d\n", dataIn[2] - 3, dataIn[3]);
 
@@ -274,7 +274,7 @@ void serialCommLoop() {
 
             if (cmdNum == Read) {        //get the device number and read/return the data
 
-              sensorData = getSensorData(dataIn[0], dataIn[1], dataIn[2], dataIn[3], dataIn[4]);
+              sensorData = getSensorData(dataIn[2], dataIn[1], dataIn[0], dataIn[3], dataIn[4]);
 
               dataOut[0] = dataIn[0];
               dataOut[1] = dataIn[1];
