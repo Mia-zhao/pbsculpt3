@@ -26,7 +26,7 @@ void ActuatedFrondChainDM::init(){
 	}
 
 	// Instantiate the proximity sensors
-	IRProximitySensor *prox = new IRProximitySensor(4, _port, getPinForAddress(4), false);
+	IRProximitySensor *prox = new IRProximitySensor(5, _port, getPinForAddress(5), false);
 	peripherals.add(prox);
 }
 
